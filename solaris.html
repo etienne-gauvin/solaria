@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Solaris</title>
+		<style>
+			html, body {
+				background-color: black;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			
+			main {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				background: linear-gradient(#5DBDE5, #E2F6FF);
+				flex: 4;
+			}
+		</style>
+		
+		<link rel="stylesheet" href="./css/inspector.css">
+	</head>
+	<body>
+		<main>
+		</main>
+		
+		<aside id="inspector" class="inspector">
+			<a href="#" class="close">◀</a>
+			<a href="#inspector" class="open">▶</a>
+			
+			<div class="content">
+				<div class="breadcrumbContainer"></div>
+				<div class="object3DListContainer"></div>
+				<div class="propertiesContainer"></div>
+			</div>
+		</aside>
+		
+		<script src="three.min.js"></script>
+		<script src="solaris-bundle.js"></script>
+	</body>
+</html>
