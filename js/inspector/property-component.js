@@ -4,16 +4,16 @@ const util = require('./util')
 
 const ColorProperty = require('./property-components/color.js')
 const BooleanProperty = require('./property-components/boolean.js')
+const Vector3Property = require('./property-components/vector3.js')
+const EulerProperty = require('./property-components/euler.js')
 
-let inspector
+const inspector = require('../inspector').instance
 
 class PropertyComponent extends React.Component {
 	
 	constructor() {
 		
 		super()
-		
-		inspector = require('../inspector').instance
 		
 		this.handleConsoleLogClick = this.handleConsoleLogClick.bind(this)
 		
@@ -52,6 +52,18 @@ class PropertyComponent extends React.Component {
 		if (value instanceof THREE.Color) {
 			
 			editor = <ColorProperty object={object} name={name} />
+			
+		}
+		
+		else if (value instanceof THREE.Vector3) {
+			
+			editor = <Vector3Property object={object} name={name} />
+			
+		}
+		
+		else if (value instanceof THREE.Euler) {
+			
+			editor = <EulerProperty object={object} name={name} />
 			
 		}
 		

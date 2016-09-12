@@ -1,5 +1,4 @@
-const game = require('./game').instance
-const inspector = require('./inspector').instance
+const game = require('./game')
 const colors = require('./colors')
 
 window.addEventListener('load', init, false)
@@ -8,15 +7,10 @@ function init() {
 	
 	game.createScene()
 	game.createLights()
-	game.createGround()
+	game.createObjects()
 	
-	window.scene = game.scene
-	
-	inspector.focused = game.scene
+	window.game = game
 	
 	game.loop()
-	inspector.loop()
-	
-	console.log(game.scene)
 	
 }

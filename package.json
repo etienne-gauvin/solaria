@@ -5,7 +5,9 @@
   "main": "solaris-bundle.js",
   "dependencies": {},
   "devDependencies": {
-    "babel": "^6.5.2"
+    "babel": "^6.5.2",
+    "chance": "^1.0.4",
+    "tween.js": "^16.3.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

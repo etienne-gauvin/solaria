@@ -30,6 +30,11 @@ class Object3DComponent extends React.Component {
 		
 		event.preventDefault()
 		
+		console.log(
+			util.getObject3DDisplayName(this.props.object),
+			this.props.object
+		)
+		
 		inspector.focused = this.props.object
 		inspector.update()
 		
