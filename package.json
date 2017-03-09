@@ -2,7 +2,7 @@
   "name": "solaris",
   "version": "1.0.0",
   "description": "",
-  "main": "solaris-bundle.js",
+  "main": "js/solaris-bundle.js",
   "dependencies": {
     "babel-preset-react": "^6.23.0",
     "browserify": "^14.1.0"
@@ -16,9 +16,9 @@
   },
   "scripts": {
     "dev-server": "http-server .",
-    "dev-watch": "watchify js/solaris.js -t [ babelify --presets [ react ] ] --debug -o solaris-bundle.js",
-    "dev-build": "browserify js/solaris.js -t [ babelify --presets [ react ] ] --debug -o solaris-bundle.js",
-    "build": "browserify js/solaris.js -t [ babelify --presets [ react ] ] -o solaris-bundle.js",
+    "dev-watch": "watchify js/src/solaris.js -t [ babelify --presets [ react ] ] --debug -o js/solaris-bundle.js",
+    "dev-build": "browserify js/src/solaris.js -t [ babelify --presets [ react ] ] --debug -o js/solaris-bundle.js",
+    "build": "browserify js/src/solaris.js -t [ babelify --presets [ react ] ] -o js/solaris-bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
