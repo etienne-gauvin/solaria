@@ -1,40 +1,30 @@
-const game = require('./game').instance
-const LatLng = require('./latlng')
+const game = require('./game')
 
 /**
  * Class Ground
  */
-class Ground {
+class Ground extends THREE.Mesh {
 	
 	/**
 	 * Ground constructor
 	 */
 	constructor() {
 		
-		this.radius = 25
+		super()
 		
-		const loader = new THREE.JSONLoader()
+		this.name = "Ground"
 	
-		loader.load('../models/planet.json', (geometry, materials) => {
-			
-			this.geometry = geometry
-			this.material = new THREE.MeshFaceMaterial(materials)
-			
-			this.mesh = new THREE.Mesh(
-				this.geometry,
-				this.material
-			)
-			
-			this.mesh.name = "Ground"
+		this.geometry = new THREE.PlaneGeometry(20, 20)
 		
-			game.scene.add(this.mesh)
-			
-			
-			this.mesh2 = this.mesh.clone()
-			game.scene.add(this.mesh2)
-			this.mesh2.rotation.y = Math.PI / 2
-			
+		this.material = new THREE.MeshLambertMaterial({
+			color: new THREE.Color('#9DDD87'),
+			side: THREE.DoubleSide
 		})
+		
+		this.castShadow = false
+		this.receiveShadow = true
+		
+		game.scene.add(this)
 		
 	}
 	

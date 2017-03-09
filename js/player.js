@@ -1,35 +1,64 @@
 const game = require('./game')
-const Pivot = require('./pivot')
-const GamepadConstants = require('./gamepad-constants')
-const gamepad = navigator.getGamepads()[0]
 const PI = Math.PI
 
 /**
  * Class Player
  */
-class Player extends THREE.Mesh {
+class Player extends THREE.SkinnedMesh {
 	
 	/**
 	 * Player constructor
 	 */
 	constructor() {
 		
-		super()
+		const geometry = game.files.player.geometry
+		
+		const materials = game.files.player.materials
+		const material = new THREE.MeshLambertMaterial({
+			color: new THREE.Color('#F6C357')
+		})
+			
+		super(geometry, material)
 		
 		this.name = "Player"
 		
-		this.pivot = new Pivot.Planet(this)
+		this.castShadow = true
+		this.receiveShadow = false
 		
-		game.loader.load('../models/player.json', (geometry, materials) => {
+		// Gestionnaire des animations
+		this.mixer = new THREE.AnimationMixer(this)
+		
+		// Vitesse de déplacement
+		this.velocity = new THREE.Vector3(0, 0, 0)
+		
+		// Vitesse de déplacement maximale
+		this.maxVelocity = 0.1
+		
+		// Rotation du modèle 3D
+		this.geometry.rotateX(Math.PI / 2)
+		this.geometry.computeFaceNormals()
+		this.geometry.computeVertexNormals()
+		this.geometry.computeMorphNormals()
+		
+		// Chargement des animations
+		this.actions = {}
+		
+		console.log(this)
+		for (let i = 0; i < this.geometry.animations.length; i++) {
 			
-			this.geometry = geometry
-			this.material = new THREE.MeshFaceMaterial(materials)
+			const clip = this.geometry.animations[i]
+			const action = this.mixer.clipAction(clip)
 			
-		})
+			action.setEffectiveWeight(1).stop()
+			
+			this.actions[clip.name] = action
+			
+			console.log(action)
+			
+		}
 		
-		// Rotation "visée" par le joueur (quand il bouge le joystick)
-		this.targetRotation = 0
 		
+		game.scene.add(this)
 	}
 	
 	/**
@@ -37,78 +66,58 @@ class Player extends THREE.Mesh {
 	 */
 	update(event) {
 		
-		// console.log(gamepad.buttons[GamepadConstants.A])
+		// Joystick / clavier
+		const control = new THREE.Vector2(
+			-game.controls.mainAxisX,
+			+game.controls.mainAxisY
+		)
 		
-		if (gamepad) {
-			
-			var applyDeadZone = (x, deadZone = 0.2) => {
-				
-				x = x < 0 ? Math.min(x, -deadZone) : Math.max(x, deadZone)
-				
-				return (Math.abs(x) - deadZone) / (1 - deadZone) * Math.sign(x)
-				
-			}
-			
-			const deadzone = 0.2
-			
-			const left = new THREE.Vector2(
-				applyDeadZone(gamepad.axes[GamepadConstants.LEFT_X],  deadzone),
-				applyDeadZone(gamepad.axes[GamepadConstants.LEFT_Y],  deadzone)
-			)
-			
-			const moveForward = gamepad.buttons[GamepadConstants.A].value
-			
-			// let rightX = applyDeadZone(gamepad.axes[GamepadConstants.RIGHT_X], deadzone)
-			// let rightY = applyDeadZone(gamepad.axes[GamepadConstants.RIGHT_Y], deadzone)
-			
-			const diff = (source, target) => {
-				
-				let diff = target - source
-				
-				if (diff > PI) {
-					
-					diff -= PI * 2
-					
-				} 
-
-				if (diff < - PI) {
-					
-					diff += PI * 2
-					
-				} 
-				
-				return diff
-				
-			}
-			
-			this.targetRotation = PI * - left.x
-			
-			this.rotation.y += this.targetRotation / 3 * event.delta
-			
-			if (moveForward) {
-				this.pivot.lng += Math.cos(this.rotation.y) * event.delta / 2
-				this.pivot.lat += Math.sin(this.rotation.y) * event.delta / 2
-			}
-			// this.pivot.lat += event.delta/* * - Math.sin(this.rotation.y)*/ * 0.5 * left.length()
-			// * PI / 6 * -left.x * Math.cos(this.rotation.y)
-			// this.pivot.lat += event.delta// * PI / 6 * left.y * Math.sin(this.rotation.y)
-			
-			// console.log(Math.cos(this.rotation.y), Math.sin(this.rotation.y))
-			
-			// this.pivot.quaternion.setFromAxisAngle(
-			// 	new THREE.Vector3(
-			// 		this.pivot.quaternion.x,
-			// 		this.pivot.quaternion.y,
-			// 		this.pivot.quaternion.z
-			// 	),
-			// 	Math.atan2(left.y, -left.x)
-			// )
+		// Force appliquée sur le joystick
+		const force = control.length()
 		
+		// Changement de vitesse
+		this.velocity.x += (control.x - this.velocity.x) / 0.1 * event.delta
+		this.velocity.y += (control.y - this.velocity.y) / 0.1 * event.delta
+		
+		// Vitesse du personnage en fonction de la force d'appui sur le joystick
+		if (force > 0) this.velocity.multiplyScalar(force)
+		
+		// Limitation de la vitesse
+		this.velocity.clampLength(-this.maxVelocity, +this.maxVelocity)
+		
+		// Application de la vitesse sur la position
+		this.position.add(this.velocity)
+		
+		
+		// Rotation du personnage
+		const targetRotation = Math.atan2(this.velocity.y, this.velocity.x)
+		
+		// Différence avec l'angle réel
+		let diff = targetRotation - this.rotation.z
+		
+		// Aller au plus court
+		if (Math.abs(diff) > Math.PI) {
+			
+			this.rotation.z += Math.PI * 2 * Math.sign(diff)
+			diff = targetRotation - this.rotation.z
+			
 		}
 		
-		// this.pivot.lng = event.time % (PI * 2)
-		// this.pivot.lng = event.time % (PI * 2)
+		// Appliquer la différence de rotation sur la rotation réelle
+		this.rotation.z += diff / 0.15 * event.delta
 		
+		// Mise à jour de l'animation
+		this.mixer.update(event.delta)
+	}
+	
+	/**
+	 * Jouer une animation
+	 */
+	play(animName, weight = 1) {
+		return this.mixer
+			.clipAction(animName)
+			.setEffectiveWeight(weight)
+			.play()
 	}
 	
 }

@@ -23,10 +23,10 @@ class PlayerCamera extends THREE.PerspectiveCamera {
 		// Vitesse de déplacement de la caméra
 		this.speed = 0.5
 		
-		// Anchor est un point fixe derrière le joueur
+		// Anchor est un point fixe à 
 		this.anchor = new THREE.Object3D
 		game.player.add(this.anchor)
-		this.anchor.position.set(-10, 8, 0)
+		this.anchor.position.set(0, 15, 0)
 		
 	}
 	
@@ -39,7 +39,7 @@ class PlayerCamera extends THREE.PerspectiveCamera {
 		this.position.z += (anchorPosition.z - this.position.z) / this.speed * event.delta
 		
 		// Redéfinir le "haut" pour la caméra
-		this.up.copy(game.player.getWorldPosition().normalize())
+		// this.up.copy(game.player.getWorldPosition().normalize())
 		
 		// Regarder le joueur
 		this.lookAt(game.player.getWorldPosition())

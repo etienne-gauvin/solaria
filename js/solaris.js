@@ -1,16 +1,18 @@
 const game = require('./game')
 const colors = require('./colors')
 
-window.addEventListener('load', init, false)
+window.addEventListener('load', function () {
 	
-function init() {
+	game.load(() => {
+		
+		game.createScene()
+		game.createLights()
+		game.createObjects()
+		
+		window.game = game
+		
+		game.loop()
+		
+	})
 	
-	game.createScene()
-	game.createLights()
-	game.createObjects()
-	
-	window.game = game
-	
-	game.loop()
-	
-}
+}, false)
