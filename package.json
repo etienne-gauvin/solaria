@@ -3,13 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "solaris-bundle.js",
-  "dependencies": {},
+  "dependencies": {
+    "babel-preset-react": "^6.23.0",
+    "browserify": "^14.1.0"
+  },
   "devDependencies": {
     "babel": "^6.5.2",
+    "babel-preset-react": "^6.23.0",
+    "babelify": "^7.3.0",
     "chance": "^1.0.4",
     "tween.js": "^16.3.5"
   },
   "scripts": {
+    "dev-server": "http-server .",
+    "dev-watch": "watchify js/solaris.js -t [ babelify --presets [ react ] ] --debug -o solaris-bundle.js",
+    "dev-build": "browserify js/solaris.js -t [ babelify --presets [ react ] ] --debug -o solaris-bundle.js",
+    "build": "browserify js/solaris.js -t [ babelify --presets [ react ] ] -o solaris-bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
