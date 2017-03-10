@@ -3,7 +3,7 @@ const colors = require('./colors')
 
 window.addEventListener('load', function () {
 	
-	game.load(() => {
+	game.load().then(() => {
 		
 		game.createScene()
 		game.createLights()

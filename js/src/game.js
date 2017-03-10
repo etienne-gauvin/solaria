@@ -15,47 +15,51 @@ game.files = {
  * Charger les fichiers
  */
 game.load = function (callback) {
-	
-	// Loader
-	const loader = new THREE.JSONLoader()
-	
-	// Vérifier qu'un fichier est chargé
-	const isLoaded = (file) => {
-		
-		return file.geometry !== undefined || file.materials !== undefined
-	
-	}
-	
-	// Charger chaque fichier
-	for (let f in this.files) {
-		
-		let file = this.files[f]
-		
-		if (! isLoaded(file)) {
-			
-			loader.load(file.path, (geometry, materials) => {
-				
-				file.geometry = geometry
-				file.materials = materials
-				
-				console.info(`Loaded: ${file.path}`)
-				
-				let allLoaded = true
-				
-				for (let ff in this.files) {
 
-					allLoaded = allLoaded && isLoaded(this.files[ff])
-				
-				}
-				
-				if (allLoaded) callback()
-				
-			})
+	return new Promise((resolve, reject) => {
+
+		// Loader
+		const loader = new THREE.JSONLoader()
+		
+		// Vérifier qu'un fichier est chargé
+		const isLoaded = (file) => {
 			
+			return file.geometry !== undefined || file.materials !== undefined
+		
 		}
 		
-	}
-	
+		// Charger chaque fichier
+		for (let f in this.files) {
+			
+			let file = this.files[f]
+			
+			if (! isLoaded(file)) {
+				
+				loader.load(file.path, (geometry, materials) => {
+					
+					file.geometry = geometry
+					file.materials = materials
+					
+					console.info(`Loaded: ${file.path}`)
+					
+					let allLoaded = true
+					
+					for (let ff in this.files) {
+
+						allLoaded = allLoaded && isLoaded(this.files[ff])
+					
+					}
+					
+					if (allLoaded) resolve()
+					
+				})
+				
+			}
+			
+		}
+
+	})
+
 }
  
 /**
