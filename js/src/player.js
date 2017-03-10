@@ -15,7 +15,8 @@ class Player extends THREE.SkinnedMesh {
 		
 		const materials = game.files.player.materials
 		const material = new THREE.MeshLambertMaterial({
-			color: new THREE.Color('#F6C357')
+			color: new THREE.Color('#F6C357'),
+			skinning: true
 		})
 			
 		super(geometry, material)
@@ -43,7 +44,6 @@ class Player extends THREE.SkinnedMesh {
 		// Chargement des animations
 		this.actions = {}
 		
-		console.log(this)
 		for (let i = 0; i < this.geometry.animations.length; i++) {
 			
 			const clip = this.geometry.animations[i]
