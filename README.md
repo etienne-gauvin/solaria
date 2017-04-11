@@ -8,19 +8,24 @@ npm install
 
 ## Build & Launch
 
-For production:
+Start server:
+```sh
+npm run start
+```
+
+Build (no sourcemaps):
 ```sh
 npm run build
 ```
 
-For development (with sourcemaps, etc):
+Auto-build for development (with sourcemaps, etc):
 ```sh
-npm run dev-build
+npm run watch
 ```
 
-To start the server (only the dev server for now):
+Start server & watch for development:
 ```sh
-npm run dev-server
+npm run start-n-watch
 ```
 
 ## Development
