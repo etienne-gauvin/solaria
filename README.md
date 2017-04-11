@@ -18,6 +18,8 @@ Build (no sourcemaps):
 npm run build
 ```
 
+## Development
+
 Auto-build for development (with sourcemaps, etc):
 ```sh
 npm run watch
@@ -26,10 +28,4 @@ npm run watch
 Start server & watch for development:
 ```sh
 npm run start-n-watch
-```
-
-## Development
-
-```sh
-npm run dev-watch
 ```
