@@ -9,8 +9,6 @@ window.addEventListener('load', function () {
 		game.createLights()
 		game.createObjects()
 
-		console.log(game)
-		
 		window.game = game
 		
 		game.loop()

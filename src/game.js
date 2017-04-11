@@ -2,8 +2,6 @@ const colors = require('./colors')
 const Chance = require('chance')
 const game = new Object(null)
 
-console.log('hellooo')
-
 /**
  * Fichiers JSON
  */
@@ -38,7 +36,7 @@ game.loadModels = function (callback) {
 		
 		// Vérifier qu'un fichier est chargé
 		const isLoaded = file => file.geometry !== undefined || file.materials !== undefined
-		
+
 		// Charger chaque fichier
 		for (let f in models) {
 			
@@ -78,6 +76,9 @@ game.loadModels = function (callback) {
  */
 game.createScene = function () {
 	
+	// dat.gui
+	this.gui = new dat.GUI()
+	
 	// Get the width and the height of the screen,
 	// use them to set up the aspect ratio of the camera 
 	// and the size of the renderer.
@@ -86,12 +87,10 @@ game.createScene = function () {
 
 	// Create the scene
 	this.scene = new THREE.Scene()
+	game.gui.add(this.scene, 'visible').name('Scene Visible')
 	
 	// Random
 	this.chance = new Chance('4536453')
-	
-	// dat.gui
-	this.gui = new dat.GUI()
 	
 	// Contrôles
 	const Controls = require('./solaris-controls')
