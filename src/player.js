@@ -11,9 +11,9 @@ class Player extends THREE.SkinnedMesh {
 	 */
 	constructor() {
 		
-		const geometry = game.files.player.geometry
+		const geometry = game.data.models.player.geometry
 		
-		const materials = game.files.player.materials
+		const materials = game.data.models.player.materials
 		const material = new THREE.MeshLambertMaterial({
 			color: new THREE.Color('#F6C357'),
 			skinning: true

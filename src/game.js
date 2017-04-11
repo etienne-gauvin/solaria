@@ -1,13 +1,17 @@
 const colors = require('./colors')
 const Chance = require('chance')
-const game = {}
+const game = new Object(null)
+
+console.log('hellooo')
 
 /**
  * Fichiers JSON
  */
-game.files = {
-	player: {
-		path: '../models/player.json'
+game.data = {
+	models: {
+		player: {
+			path: '../models/player.json'
+		}
 	}
 }
 
@@ -16,22 +20,29 @@ game.files = {
  */
 game.load = function (callback) {
 
+	return this.loadModels().then(callback)
+
+}
+
+/**
+ * Charger les fichiers
+ */
+game.loadModels = function (callback) {
+
 	return new Promise((resolve, reject) => {
+
+		const models = this.data.models
 
 		// Loader
 		const loader = new THREE.JSONLoader()
 		
 		// Vérifier qu'un fichier est chargé
-		const isLoaded = (file) => {
-			
-			return file.geometry !== undefined || file.materials !== undefined
-		
-		}
+		const isLoaded = file => file.geometry !== undefined || file.materials !== undefined
 		
 		// Charger chaque fichier
-		for (let f in this.files) {
+		for (let f in models) {
 			
-			let file = this.files[f]
+			let file = models[f]
 			
 			if (! isLoaded(file)) {
 				
@@ -44,9 +55,9 @@ game.load = function (callback) {
 					
 					let allLoaded = true
 					
-					for (let ff in this.files) {
+					for (let ff in models) {
 
-						allLoaded = allLoaded && isLoaded(this.files[ff])
+						allLoaded = allLoaded && isLoaded(models[ff])
 					
 					}
 					
