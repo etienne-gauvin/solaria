@@ -2,10 +2,12 @@
   "name": "solaris",
   "version": "1.0.0",
   "description": "",
-  "main": "js/solaris-bundle.js",
+  "main": "build/js/solaris-bundle.js",
   "dependencies": {
     "babel-preset-react": "^6.23.0",
-    "browserify": "^14.1.0"
+    "browserify": "^14.1.0",
+    "concurrently": "^3.4.0",
+    "shx": "^0.2.2"
   },
   "devDependencies": {
     "babel": "^6.5.2",
@@ -15,11 +17,12 @@
     "tween.js": "^16.3.5"
   },
   "scripts": {
-    "dev-server": "http-server .",
-    "dev-watch": "watchify js/src/solaris.js -t [ babelify --presets [ react ] ] --debug -o js/solaris-bundle.js",
-    "dev-build": "browserify js/src/solaris.js -t [ babelify --presets [ react ] ] --debug -o js/solaris-bundle.js",
-    "build": "browserify js/src/solaris.js -t [ babelify --presets [ react ] ] -o js/solaris-bundle.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "http-server build",
+    "start-n-watch": "concurrently --names \"start,watch\" \"npm run watch\" \"sleep 5 && npm start\"",
+    "prewatch": "npm run build",
+    "watch": "watchify src/solaris.js -t [ babelify --presets [ react ] ] --debug -o build/js/solaris-bundle.js",
+    "prebuild": "shx rm -Rf build/ && shx mkdir -p build/js",
+    "build": "cp -R static/* build && browserify src/solaris.js -t [ babelify --presets [ react ] ] -o build/js/solaris-bundle.js"
   },
   "author": "",
   "license": "ISC"
