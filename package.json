@@ -20,7 +20,7 @@
     "start": "http-server build",
     "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"server,watch\" \"npm run watch\" \"sleep 5 && npm start\"",
     "prewatch": "npm run build",
-    "watch": "watchify --verbose src/solaris.js -t [ babelify --presets [ react ] ] --debug -o build/js/solaris-bundle.js",
+    "watch": "watchify src/solaris.js --verbose -t [ babelify --presets [ react ] ] --debug -o build/js/solaris-bundle.js",
     "prebuild": "shx rm -Rf build/ && shx mkdir -p build/js",
     "build": "cp -R static/* build && browserify src/solaris.js -t [ babelify --presets [ react ] ] -o build/js/solaris-bundle.js"
   },
