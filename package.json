@@ -11,6 +11,9 @@
     "browserify": "^14.1.0",
     "chance": "^1.0.6",
     "concurrently": "^3.4.0",
+    "react": "^15.5.4",
+    "react-redux": "^5.0.4",
+    "redux": "^3.6.0",
     "shx": "^0.2.2"
   },
   "devDependencies": {},
