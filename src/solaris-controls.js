@@ -1,5 +1,5 @@
-const game = require('./game')
-const Controls = require('./controls')
+import game from './game'
+import Controls from './controls'
 
 /**
  * Gère les contrôles (clavier/souris et manette) du joueur
@@ -55,4 +55,4 @@ class SolarisControls extends Controls {
 	
 }
 
-module.exports = SolarisControls
+export default SolarisControls

@@ -1,5 +1,5 @@
-const game = require('./game')
-const Pivot = require('./pivot')
+import game from './game'
+import Pivot from './pivot'
 
 class PlayerCamera extends THREE.PerspectiveCamera {
 	
@@ -47,4 +47,4 @@ class PlayerCamera extends THREE.PerspectiveCamera {
 	}
 }
 
-module.exports = PlayerCamera
+export default PlayerCamera

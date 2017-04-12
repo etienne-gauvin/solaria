@@ -1,4 +1,4 @@
-const game = require('./game')
+import game from './game'
 
 class Camera extends THREE.PerspectiveCamera {
 	
@@ -43,4 +43,4 @@ class Camera extends THREE.PerspectiveCamera {
 	}
 }
 
-module.exports = Camera
+export default Camera

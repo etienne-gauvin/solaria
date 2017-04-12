@@ -1,6 +1,6 @@
-const game = require('./game')
+import game from './game'
+import Character from './character'
 const PI = Math.PI
-const Character = require('./character')
 
 /**
  * Class Player
@@ -54,5 +54,5 @@ class Player extends Character {
 
 }
 
-module.exports = Player
+export default Player
 

@@ -208,5 +208,4 @@ class Controls {
 	
 }
 
-module.exports = Controls
-
+export default Controls

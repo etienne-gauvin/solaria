@@ -1,5 +1,5 @@
-const game = require('./game')
-const colors = require('./colors')
+import game from './game'
+import colors from './colors'
 
 window.addEventListener('load', function () {
 	

@@ -1,4 +1,4 @@
-const game = require('./game')
+import game from './game'
 
 /**
  * Class Ground
@@ -37,4 +37,4 @@ class Ground extends THREE.Mesh {
 	
 }
 
-module.exports = Ground
+export default Ground

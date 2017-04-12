@@ -1,4 +1,4 @@
-const game = require('./game')
+import game from './game'
 const PI = Math.PI
 
 /**
@@ -104,5 +104,5 @@ class Character extends THREE.SkinnedMesh {
 	
 }
 
-module.exports = Character
+export default Character
 

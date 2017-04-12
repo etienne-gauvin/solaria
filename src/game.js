@@ -1,5 +1,9 @@
-const colors = require('./colors')
-const Chance = require('chance')
+import Chance from 'chance'
+import colors from './colors'
+import Ground from './ground.js'
+import Player from './player.js'
+import Camera from './camera.js'
+import Controls from './solaris-controls'
 
 class Game {
 
@@ -102,7 +106,6 @@ class Game {
 		this.chance = new Chance('4536453')
 		
 		// Contrôles
-		const Controls = require('./solaris-controls')
 		this.controls = new Controls
 		
 		// Add a fog effect to the scene same color as the
@@ -197,11 +200,7 @@ class Game {
 	 * Création du sol
 	 */
 	createObjects() {
-		
-		const Ground = require('./ground.js')
-		const Player = require('./player.js')
-		const Camera = require('./camera.js')
-		
+
 		this.ground = new Ground
 		this.player = new Player
 		
@@ -275,11 +274,11 @@ class Game {
 		
 		// Prochaine frame
 		window.requestAnimationFrame(this.loop.bind(this))
-		
+
 	}
 
 }
 
 
 
-module.exports = new Game
+export default new Game
