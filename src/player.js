@@ -1,12 +1,13 @@
 import game from './game'
 import Character from './character'
+import Inventory from './inventory'
 const PI = Math.PI
 
 /**
  * Class Player
  */
 class Player extends Character {
-	
+
 	/**
 	 * Player constructor
 	 */
@@ -26,8 +27,11 @@ class Player extends Character {
 		
 		game.scene.add(this)
 
+		// Inventaire
+		this.inventory = new Inventory
+
 		// dat.GUI
-		const playerPosFolder = game.gui.addFolder('Player')
+		const playerPosFolder = game.datgui.addFolder('Player')
 		playerPosFolder.add(this.position, 'x').name('Position X').listen()
 		playerPosFolder.add(this.position, 'y').name('Position Y').listen()
 		playerPosFolder.add(this.position, 'z').name('Position Z').listen()

@@ -10,7 +10,7 @@ class SolarisControls extends Controls {
 		
 		super()
 		
-		const controlsFolder = game.gui.addFolder('Controls')
+		const controlsFolder = game.datgui.addFolder('Controls')
 		controlsFolder.add(this, 'mainAxisX', -1, 1).name('Direction X').step(0.01).listen()
 		controlsFolder.add(this, 'mainAxisY', -1, 1).name('Direction Y').step(0.01).listen()
 		controlsFolder.add(this, 'controller').name('Device').listen()

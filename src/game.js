@@ -90,7 +90,7 @@ class Game {
 	createScene() {
 		
 		// dat.gui
-		this.gui = new dat.GUI()
+		this.datgui = new dat.GUI()
 		
 		// Get the width and the height of the screen,
 		// use them to set up the aspect ratio of the camera 
@@ -100,7 +100,7 @@ class Game {
 
 		// Create the scene
 		this.scene = new THREE.Scene()
-		this.gui.add(this.scene, 'visible').name('Scene Visible')
+		this.datgui.add(this.scene, 'visible').name('Scene Visible')
 		
 		// Random
 		this.chance = new Chance('4536453')
