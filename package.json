@@ -18,12 +18,12 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "http-server build",
-    "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"watch,server\" \"npm run watch\" \"sleep 5 && npm start\"",
+    "start": "http-server ./public",
+    "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"watch,server\" \"npm run watch\" \"npm start\"",
     "prewatch": "npm run build",
-    "watch": "watchify src/solaris.js --verbose -t [ babelify --presets [ env react ] ] --debug -o build/js/solaris-bundle.js",
-    "prebuild": "shx rm -Rf build/ && shx mkdir -p build/js",
-    "build": "cp -R static/* build && browserify src/solaris.js -t [ babelify --presets [ env react ] ] -o build/js/solaris-bundle.js"
+    "watch": "watchify ./src/solaris.js --verbose -t [ babelify --presets [ env react ] ] --debug -o ./public/js/build/solaris-bundle.js",
+    "prebuild": "shx mkdir -p ./public/js/build",
+    "build": "browserify ./src/solaris.js -t [ babelify --presets [ env react ] ] -o ./public/js/build/solaris-bundle.js"
   },
   "author": "",
   "license": "ISC"
