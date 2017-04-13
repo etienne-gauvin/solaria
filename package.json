@@ -11,10 +11,6 @@
     "browserify": "^14.1.0",
     "chance": "^1.0.6",
     "concurrently": "^3.4.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "react-redux": "^5.0.4",
-    "redux": "^3.6.0",
     "shx": "^0.2.2"
   },
   "devDependencies": {},
@@ -22,9 +18,9 @@
     "start": "http-server ./public",
     "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"watch,server\" \"npm run watch\" \"npm start\"",
     "prewatch": "npm run build",
-    "watch": "watchify ./src/solaris.js --verbose -t [ babelify --presets [ env react ] ] --debug -o ./public/js/build/solaris-bundle.js",
+    "watch": "watchify ./src/solaris.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/js/build/solaris-bundle.js",
     "prebuild": "shx mkdir -p ./public/js/build",
-    "build": "browserify ./src/solaris.js -t [ babelify --presets [ env react ] ] -o ./public/js/build/solaris-bundle.js"
+    "build": "browserify ./src/solaris.js -t [ babelify --presets [ env ] ] -o ./public/js/build/solaris-bundle.js"
   },
   "author": "",
   "license": "ISC"
