@@ -26,11 +26,11 @@
 			}
 			
 			main .ui {
-				z-index: 10;
+				z-index: 20;
 			}
 			
 			main canvas {
-				z-index: 20;
+				z-index: 10;
 			}
 
 			.ui .inventory {
@@ -40,12 +40,16 @@
 				width: 90vw;
 				background-color: hsla(120, 100%, 50%, 0.8);
 			}
+
+			.dg.ac {
+				z-index: 30 !important;
+			}
 		</style>
 	</head>
 	<body>
 		<main>
-			
-			<div id="ui" class="ui"></div>
+			<div id="ui" class="ui">
+			</div>
 		</main>
 		
 		<script src="js/three.js"></script>

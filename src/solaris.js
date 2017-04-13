@@ -5,6 +5,7 @@ window.addEventListener('load', function () {
 	
 	game.load().then(() => {
 		
+		game.createUI()
 		game.createScene()
 		game.createLights()
 		game.createObjects()

@@ -1,55 +1,26 @@
-import React, { Component } from 'react';
+import EventEmitter from 'events'
+import React, { PropTypes } from 'react'
 
-class ItemComponent extends Component {
+export default class Inventory extends EventEmitter  {
 
-	constructor(item) {
-		
-		super()
-
-		this.item = item
-		
-	}
-
-	render() {
-
-		return (
-
-			<li>{item.name}</li>
-
-		)
-
-	}
-
-}
-
-class Inventory extends Component {
-
+	/**
+	 */
 	constructor() {
-
+		
 		super()
 
-		this.itemComponents = []
+		this.items = []
+		
+	}
+
+	/**
+	 * Add item
+	 */
+	add(item) {
+
+		this.items.push(item)
+		this.emit('item-added', item)
 
 	}
 
-	addItem(item) {
-
-		return this.itemComponents.push(new ItemComponent(item))
-
-	}
-
-	render() {
-
-		return (
-
-			<ul>
-				{itemComponents}
-			</ul>
-
-		)
-
-	}
-	
 }
-
-export default Inventory

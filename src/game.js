@@ -1,9 +1,11 @@
 import Chance from 'chance'
+import InventoryUI from './ui/inventory-ui'
 import colors from './colors'
-import Ground from './ground.js'
-import Player from './player.js'
-import Camera from './camera.js'
+import Ground from './ground'
+import Player from './player'
+import Camera from './camera'
 import Controls from './solaris-controls'
+import WoodenChairItem from './items/wooden-chair-item'
 
 class Game {
 
@@ -83,6 +85,17 @@ class Game {
 		})
 
 	}
+
+	/**
+	 * Create UI
+	 */
+	createUI() {
+
+		this.ui = Object.create(null)
+
+		this.ui.inventory = new InventoryUI
+
+	}
 	 
 	/**
 	 * Création de la scène
@@ -135,7 +148,7 @@ class Game {
 		// container we created in the HTML
 		const container = document.querySelector('main')
 		container.appendChild(renderer.domElement)
-		
+
 		// Listen to the screen: if the user resizes it
 		// we have to update the camera and the renderer size
 		window.addEventListener('resize', () => {
@@ -202,7 +215,15 @@ class Game {
 	createObjects() {
 
 		this.ground = new Ground
+
+		// Create the player
 		this.player = new Player
+
+		// Attach the InventoryUI to the player's inventory
+		this.ui.inventory.attach(this.player.inventory)
+
+		// Adding an object ot the player's inventory
+		this.player.inventory.add(new WoodenChairItem('uuid-1234'))
 		
 		// Create the camera
 		this.camera = new Camera
