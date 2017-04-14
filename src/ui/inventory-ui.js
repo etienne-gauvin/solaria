@@ -1,3 +1,4 @@
+import game from '../game'
 import ItemUI from './item-ui'
 
 export default class InventoryUI {
@@ -10,6 +11,8 @@ export default class InventoryUI {
 
 		this.onItemAdded = this.onItemAdded.bind(this)
 		this.onItemRemoved = this.onItemRemoved.bind(this)
+
+		this.onInventoryButtonPressed = this.onInventoryButtonPressed.bind(this)
 
 		this.$ul = document.createElement('ul')
 
@@ -28,6 +31,9 @@ export default class InventoryUI {
 
 		this.itemUIs = this.inventory.items.map(item => this.addItem(item))
 
+		// Open the inventory
+		game.controls.inventoryButton.addListener('pressed', this.onInventoryButtonPressed)
+
 	}
 
 	detach() {
@@ -36,6 +42,8 @@ export default class InventoryUI {
 
 		this.inventory.removeListener('item-added', this.onItemAdded)
 		this.inventory.removeListener('item-removed', this.onItemRemoved)
+		
+		game.controls.inventoryButton.removeListener('pressed', this.onInventoryButtonPressed)
 
 		this.inventory = null
 
@@ -64,6 +72,15 @@ export default class InventoryUI {
 		const index = this.itemUIs.findIndex(itemUI => itemUI.item === item)
 
 		this.itemUIs.splice(index, 1)
+
+	}
+
+	onInventoryButtonPressed(controller, event) {
+
+		if (controller === 'keyboard' && event)
+			event.preventDefault()
+
+		console.log('Open Inventory', controller, event)
 
 	}
 
