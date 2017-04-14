@@ -1,5 +1,4 @@
 import EventEmitter from 'events'
-import React, { PropTypes } from 'react'
 
 export default class Inventory extends EventEmitter  {
 
