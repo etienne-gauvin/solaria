@@ -108,14 +108,29 @@ export default class Controls {
 		 */
 		window.addEventListener('keyup', event => {
 			
-			if (!event.defaultPrevented) {
+			if (!event.defaultPrevented && !event.repeat) {
 
 				this.values.keyboard[event.key] = false
 				this.controller = 'keyboard'
 				
-				this.actionsArray
-					.filter(action => action.keys.find(key => key === event.key))
-					.forEach(action => action.emit('released', this.controller, event))
+				const concernedActions = this.actionsArray.filter(action =>
+					
+					action.keys.find(key => key === event.key)
+					
+				)
+				
+				if (concernedActions.length) {
+					
+					concernedActions.forEach(action =>
+						
+						action.emit('released', this.controller, event)
+					
+					)
+					
+					event.preventDefault()
+					
+				}
+				
 
 			}
 
