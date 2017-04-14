@@ -11,7 +11,7 @@ class SolarisControls extends Controls {
 		super()
 
 		// Open/close the inventory
-		this.createAction('inventoryButton', { keys: [ 'Tab' ], buttons: [ this.GAMEPAD.Y ] })
+		this.createAction('inventory', { keys: [ 'Tab' ], buttons: [ this.GAMEPAD.Y ] })
 
 		// dat.GUI
 		const controlsFolder = game.datgui.addFolder('Controls')

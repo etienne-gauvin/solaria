@@ -24,20 +24,20 @@ export default class Controls {
 	
 	constructor() {
 
-		this._gamepad = null
-		this._deadzone = 0.2
+		this.gamepad = null
+		this.deadzone = 0.2
 		
 		// Contrôleur actuellement utilisé ('gamepad' ou 'keyboard')
-		this._controller = 'keyboard'
+		this.controller = 'keyboard'
 		
 		// Valeurs sauvegardées
-		this._values = {
+		this.values = {
 			keyboard: {},
 			gamepad: null
 		}
 		
 		// Valeurs précédentes
-		this._previous = {
+		this.previous = {
 			keyboard: {},
 			gamepad: null
 		}
@@ -66,7 +66,8 @@ export default class Controls {
 		}
 
 		// Actions
-		this._actions = []
+		this.actions = {}
+		this.actionsArray = []
 		
 		/**
 		 * Branchement d'une manette
@@ -79,8 +80,8 @@ export default class Controls {
 				gp.index, gp.id,
 				gp.buttons.length, gp.axes.length)
 			
-			this._gamepad = gp
-			this._controller = 'gamepad'
+			this.gamepad = gp
+			this.controller = 'gamepad'
 
 		})
 		
@@ -91,12 +92,12 @@ export default class Controls {
 			
 			if (!event.defaultPrevented) {
 
-				this._values.keyboard[event.key] = true
-				this._controller = 'keyboard'
-
-				this._actions
+				this.values.keyboard[event.key] = true
+				this.controller = 'keyboard'
+				
+				this.actionsArray
 					.filter(action => action.keys.find(key => key === event.key))
-					.forEach(action => action.emit('pressed', this._controller, event))
+					.forEach(action => action.emit('pressed', this.controller, event))
 
 			}
 
@@ -109,12 +110,12 @@ export default class Controls {
 			
 			if (!event.defaultPrevented) {
 
-				this._values.keyboard[event.key] = false
-				this._controller = 'keyboard'
+				this.values.keyboard[event.key] = false
+				this.controller = 'keyboard'
 				
-				this._actions
+				this.actionsArray
 					.filter(action => action.keys.find(key => key === event.key))
-					.forEach(action => action.emit('released', this._controller, event))
+					.forEach(action => action.emit('released', this.controller, event))
 
 			}
 
@@ -122,27 +123,18 @@ export default class Controls {
 		
 	}
 
-	/** 
-	 * Get the current controller
-	 */
-	get controller() {
-		
-		return this._controller
-
-	}
-	
 	/**
 	 * Mise à jour
 	 */
 	update(event) {
 		
 		let gamepads = navigator.getGamepads()
-		this._gamepad = gamepads[0]
+		this.gamepad = gamepads[0]
 		
-		if (this._gamepad) {
+		if (this.gamepad) {
 			
-			const previous = this._previous.gamepad
-			const current = this.copyGamepadValues(this._gamepad)
+			const previous = this.previous.gamepad
+			const current = this.values.gamepad = this.copyGamepadValues(this.gamepad)
 			
 			if (previous) {
 
@@ -152,11 +144,11 @@ export default class Controls {
 					
 					if (previous.buttons[i].pressed !== current.buttons[i].pressed) {
 						
-						this._controller = 'gamepad'
-
-						this._actions
-							.filter(action => action.buttons.find(button => button === current.buttons[i].value))
-							.forEach(action => action.emit(current.buttons[i].pressed ? 'pressed' : 'released'), this._controller)
+						this.controller = 'gamepad'
+						
+						this.actionsArray
+							.filter(action => action.buttons.find(button => button === i))
+							.forEach(action => action.emit(current.buttons[i].pressed ? 'pressed' : 'released'), this.controller)
 
 					}
 					
@@ -166,7 +158,7 @@ export default class Controls {
 					
 					if (previous.axes[i] !== current.axes[i]) {
 						
-						this._controller = 'gamepad'
+						this.controller = 'gamepad'
 						
 					}
 					
@@ -174,8 +166,7 @@ export default class Controls {
 			
 			}
 		
-			this._previous.gamepad = this._values.gamepad
-			this._values.gamepad = current
+			this.previous.gamepad = this.values.gamepad
 			
 		}
 		
@@ -188,7 +179,7 @@ export default class Controls {
 	 */
 	applyDeadzone(x) {
 		
-		let deadzone = this._deadzone
+		let deadzone = this.deadzone
 				
 		x = x < 0 ? Math.min(x, -deadzone) : Math.max(x, deadzone)
 		
@@ -203,21 +194,21 @@ export default class Controls {
 	 */
 	getAxis(gamepadAxisIndex, keyboardKeys) {
 		
-		switch (this._controller) {
+		switch (this.controller) {
 			
 			case 'gamepad':
 				
-				if (this._values.gamepad === null) return 0
+				if (this.values.gamepad === null) return 0
 				
-				return this._values.gamepad.axes[gamepadAxisIndex]
+				return this.values.gamepad.axes[gamepadAxisIndex]
 				
 				break
 			
 			default:
 			case 'keyboard':
 			
-				let positive = this._values.keyboard[keyboardKeys.positive] ? +1 : 0
-				let negative = this._values.keyboard[keyboardKeys.negative] ? -1 : 0
+				let positive = this.values.keyboard[keyboardKeys.positive] ? +1 : 0
+				let negative = this.values.keyboard[keyboardKeys.negative] ? -1 : 0
 				
 				return positive + negative
 				
@@ -243,7 +234,7 @@ export default class Controls {
 				value: gamepad.buttons[i].value,
 				pressed: gamepad.buttons[i].pressed
 			}
-			
+						
 		}
 		
 		for (let i = 0; i < gamepad.axes.length; i++) {
@@ -268,9 +259,8 @@ export default class Controls {
 
 		const action = new Action(name, { keys, buttons })
 
-		this._actions.push(action)
-
-		Object.defineProperty(this, name, { value: action })
+		this.actions[action.name] = action
+		this.actionsArray.push(action)
 
 	}
 

@@ -32,7 +32,7 @@ export default class InventoryUI {
 		this.itemUIs = this.inventory.items.map(item => this.addItem(item))
 
 		// Open the inventory
-		game.controls.inventoryButton.addListener('pressed', this.onInventoryButtonPressed)
+		game.controls.actions.inventory.addListener('pressed', this.onInventoryButtonPressed)
 
 	}
 
@@ -43,7 +43,7 @@ export default class InventoryUI {
 		this.inventory.removeListener('item-added', this.onItemAdded)
 		this.inventory.removeListener('item-removed', this.onItemRemoved)
 		
-		game.controls.inventoryButton.removeListener('pressed', this.onInventoryButtonPressed)
+		game.controls.actions.inventory.removeListener('pressed', this.onInventoryButtonPressed)
 
 		this.inventory = null
 
@@ -79,8 +79,12 @@ export default class InventoryUI {
 
 		if (controller === 'keyboard' && event)
 			event.preventDefault()
-
-		console.log('Open Inventory', controller, event)
+		
+		if (!event || !event.repeat) {
+			
+			console.log('Open Inventory', controller, event)
+			
+		}
 
 	}
 
