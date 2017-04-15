@@ -11,8 +11,9 @@ export default class ItemUI {
 		// Attached item
 		this.item = item
 
-		this.$container = document.createElement('div')
-		this.$container.innerHTML = item.toString()
+		this.$element = document.createElement('div')
+		this.$element.classList.add('item')
+		this.$element.innerHTML = item.toString()
 		
 	}
 

@@ -6,20 +6,31 @@ export default class InventoryUI {
 	constructor() {
 
 		this.inventory = null
+		
+		this.$container = document.querySelector('.inventory')
+		this.$items = this.$container.querySelector('.items')
 
-		this.itemUIs = []
+		this.createElements()
 
 		this.onItemAdded = this.onItemAdded.bind(this)
 		this.onItemRemoved = this.onItemRemoved.bind(this)
 
 		this.onInventoryButtonPressed = this.onInventoryButtonPressed.bind(this)
 
-		this.$ul = document.createElement('ul')
-
-		this.$container = document.createElement('div')
-		this.$container.className = 'inventory'
-		this.$container.append(this.$ul)
-
+	}
+	
+	createElements() {
+		
+		const $items = this.$items
+		
+		for (let i = 0; i < 15; i++) {
+			
+			const $space = document.createElement('div')
+			$space.classList.add('space')
+			$items.appendChild($space)
+			
+		}
+		
 	}
 
 	attach(inventory) {
@@ -31,7 +42,7 @@ export default class InventoryUI {
 
 		this.itemUIs = this.inventory.items.map(item => this.addItem(item))
 
-		// Open the inventory
+		// Open/close the inventory listener
 		game.controls.actions.inventory.addListener('pressed', this.onInventoryButtonPressed)
 
 	}
@@ -55,10 +66,26 @@ export default class InventoryUI {
 
 	}
 
-	addItem(item) {
-
-		this.itemUIs.push(new ItemUI(item))
-
+	addItem(item, $space = null) {
+		
+		if (!$space) $space = this.findFreeSpace()
+			
+		if ($space) {
+			
+			if (!item.ui) item.ui = new ItemUI(item)
+			
+			this.itemUIs.push(item.ui)
+			
+			$space.appendChild(item.ui.$element)
+			
+		}
+		
+		else {
+			
+			throw new Error('No space available in inventory for this item')
+			
+		}
+		
 	}
 
 	onItemRemoved(item) {
@@ -72,26 +99,44 @@ export default class InventoryUI {
 		const index = this.itemUIs.findIndex(itemUI => itemUI.item === item)
 
 		this.itemUIs.splice(index, 1)
+		
+		this.$items.removeChild(item.ui.$element)
 
 	}
 
 	onInventoryButtonPressed(controller, event) {
 
-		if (controller === 'keyboard' && event)
-			event.preventDefault()
+		this.open = !this.open
 		
-		if (!event || !event.repeat) {
-			
-			console.log('Open Inventory', controller, event)
-			
-		}
-
 	}
-
-	render() {
-
-
-
+	
+	/**
+	 * Return a free $space of undefined
+	 * @return <HTMLElement>
+	 */
+	 
+	findFreeSpace() {
+		
+		const $spaces = Array.from(this.$items.children)
+		
+		return $spaces.find($space => $space.children.length < 1)
+		
+	}
+	
+	get open() {
+		
+		return this.$container.classList.contains('open')
+		
+	}
+	
+	set open(open) {
+		
+		if (open)
+			this.$container.classList.add('open')
+		
+		else
+			this.$container.classList.remove('open')
+		
 	}
 	
 }

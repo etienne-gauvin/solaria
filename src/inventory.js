@@ -7,6 +7,8 @@ export default class Inventory extends EventEmitter  {
 	constructor() {
 		
 		super()
+		
+		this.ui = null
 
 		this.items = []
 		
