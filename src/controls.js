@@ -90,15 +90,20 @@ export default class Controls {
 		 */
 		window.addEventListener('keydown', event => {
 			
-			if (!event.defaultPrevented) {
+			if (!event.defaultPrevented && !event.repeat) {
 
 				this.values.keyboard[event.key] = true
 				this.controller = 'keyboard'
 				
+				// Avoid to block ALL keys, to keep the browser shortcuts
+				let exec = false
+				
 				this.actionsArray
 					.filter(action => action.keys.find(key => key === event.key))
-					.forEach(action => action.emit('pressed', this.controller, event))
-
+					.forEach(action => exec = true && action.emit('pressed'))
+				
+				if (exec) event.preventDefault()
+				
 			}
 
 		})
@@ -113,25 +118,15 @@ export default class Controls {
 				this.values.keyboard[event.key] = false
 				this.controller = 'keyboard'
 				
-				const concernedActions = this.actionsArray.filter(action =>
-					
-					action.keys.find(key => key === event.key)
-					
-				)
+				// Avoid to block ALL keys, to keep the browser shortcuts
+				let exec = false
 				
-				if (concernedActions.length) {
+				this.actionsArray
+					.filter(action => action.keys.find(key => key === event.key))
+					.forEach(action => exec = true && action.emit('released'))
 					
-					concernedActions.forEach(action =>
-						
-						action.emit('released', this.controller, event)
-					
-					)
-					
-					event.preventDefault()
-					
-				}
+				if (exec) event.preventDefault()
 				
-
 			}
 
 		})
