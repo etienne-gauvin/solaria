@@ -1,8 +1,7 @@
 export default class Item {
 
-	constructor(uuid, name) {
+	constructor(name) {
 
-		this.uuid = uuid
 		this.name = name
 
 	}

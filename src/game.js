@@ -233,7 +233,7 @@ class Game extends EventEmitter {
 		this.ui.inventory.attach(this.player.inventory)
 
 		// Adding an object ot the player's inventory
-		this.player.inventory.add(new WoodenChairItem('uuid-1234'))
+		this.player.inventory.add(new WoodenChairItem)
 		
 		// Create the camera
 		this.camera = new Camera
