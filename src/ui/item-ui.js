@@ -11,9 +11,10 @@ export default class ItemUI {
 		// Attached item
 		this.item = item
 
-		this.$element = document.createElement('div')
-		this.$element.classList.add('item')
-		this.$element.innerHTML = item.toString()
+		this.$ = document.createElement('div')
+		this.$.classList.add('item')
+		this.$.setAttribute('draggable', 'true')
+		this.$.innerHTML = item.toString()
 		
 	}
 

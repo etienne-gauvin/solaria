@@ -76,7 +76,7 @@ export default class InventoryUI {
 			
 			this.itemUIs.push(item.ui)
 			
-			$space.appendChild(item.ui.$element)
+			$space.appendChild(item.ui.$)
 			
 		}
 		
@@ -100,7 +100,7 @@ export default class InventoryUI {
 
 		this.itemUIs.splice(index, 1)
 		
-		this.$items.removeChild(item.ui.$element)
+		this.$items.removeChild(item.ui.$)
 
 	}
 
