@@ -9,7 +9,7 @@ export default class Inventory extends EventEmitter  {
 		super()
 		
 		this.ui = null
-
+		
 		this.items = []
 		
 	}

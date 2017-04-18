@@ -1,11 +1,14 @@
 import game from '../game'
 import ItemUI from './item-ui'
+import ItemSpaceUI from './item-space-ui'
 
 export default class InventoryUI {
 
 	constructor() {
 
 		this.inventory = null
+		
+		this.spaces = []
 		
 		this.$container = document.querySelector('.inventory')
 		this.$items = this.$container.querySelector('.items')
@@ -21,15 +24,20 @@ export default class InventoryUI {
 	
 	createElements() {
 		
-		const $items = this.$items
-		
 		for (let i = 0; i < 15; i++) {
 			
-			const $space = document.createElement('div')
-			$space.classList.add('space')
-			$items.appendChild($space)
+			const space = new ItemSpaceUI
+			
+			this.spaces.push(space)
+			this.$items.appendChild(space.$)
 			
 		}
+		
+	}
+	
+	onDropOnSpace(event) {
+		
+		console.log(event)
 		
 	}
 
@@ -40,7 +48,7 @@ export default class InventoryUI {
 		this.inventory.addListener('item-added', this.onItemAdded)
 		this.inventory.addListener('item-removed', this.onItemRemoved)
 
-		this.itemUIs = this.inventory.items.map(item => this.addItem(item))
+		this.inventory.items.forEach(item => this.addItem(item))
 
 		// Open/close the inventory listener
 		game.controls.actions.inventory.addListener('pressed', this.onInventoryButtonPressed)
@@ -48,8 +56,6 @@ export default class InventoryUI {
 	}
 
 	detach() {
-
-		this.itemUIs.splice(0, this.itemUIs.length)
 
 		this.inventory.removeListener('item-added', this.onItemAdded)
 		this.inventory.removeListener('item-removed', this.onItemRemoved)
@@ -66,25 +72,13 @@ export default class InventoryUI {
 
 	}
 
-	addItem(item, $space = null) {
+	addItem(item, space = null) {
 		
-		if (!$space) $space = this.findFreeSpace()
-			
-		if ($space) {
-			
-			if (!item.ui) item.ui = new ItemUI(item)
-			
-			this.itemUIs.push(item.ui)
-			
-			$space.appendChild(item.ui.$)
-			
-		}
+		if (!space) space = this.findFreeSpace()
 		
-		else {
-			
-			throw new Error('No space available in inventory for this item')
-			
-		}
+		if (space) space.item = item
+		
+		else throw new Error('No space available in inventory for this item')
 		
 	}
 
@@ -111,15 +105,13 @@ export default class InventoryUI {
 	}
 	
 	/**
-	 * Return a free $space of undefined
-	 * @return <HTMLElement>
+	 * Return a free space or undefined
+	 * @return <ItemSpace>
 	 */
 	 
 	findFreeSpace() {
 		
-		const $spaces = Array.from(this.$items.children)
-		
-		return $spaces.find($space => $space.children.length < 1)
+		return this.spaces.find(space => space.isEmpty)
 		
 	}
 	

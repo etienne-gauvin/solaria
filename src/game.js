@@ -28,6 +28,9 @@ class Game extends EventEmitter {
 			delta: 0,
 			time: 0
 		}
+		
+		// Liste de tous les items
+		this.items = {}
 
 	}
 

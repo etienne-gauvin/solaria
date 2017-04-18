@@ -11,7 +11,8 @@
     "browserify": "^14.1.0",
     "chance": "^1.0.6",
     "concurrently": "^3.4.0",
-    "shx": "^0.2.2"
+    "shx": "^0.2.2",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {},
   "scripts": {
