@@ -1,4 +1,4 @@
-# Solaris
+# Solaria
 
 ## Install
 

@@ -5,7 +5,7 @@ import colors from './colors'
 import Ground from './ground'
 import Player from './player'
 import Camera from './camera'
-import Controls from './solaris-controls'
+import Controls from './solaria-controls'
 import WoodenChairItem from './items/wooden-chair-item'
 
 class Game extends EventEmitter {

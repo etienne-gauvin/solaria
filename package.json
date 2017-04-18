@@ -1,8 +1,8 @@
 {
-  "name": "solaris",
+  "name": "solaria",
   "version": "1.0.0",
   "description": "",
-  "main": "build/js/solaris-bundle.js",
+  "main": "build/js/solaria-bundle.js",
   "dependencies": {
     "babel": "^6.5.2",
     "babel-preset-env": "^1.3.3",
@@ -18,9 +18,9 @@
     "start": "http-server ./public",
     "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"watch,server\" \"npm run watch\" \"npm start\"",
     "prewatch": "npm run build",
-    "watch": "watchify ./src/solaris.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/js/build/solaris-bundle.js",
+    "watch": "watchify ./src/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/js/build/solaria-bundle.js",
     "prebuild": "shx mkdir -p ./public/js/build",
-    "build": "browserify ./src/solaris.js -t [ babelify --presets [ env ] ] -o ./public/js/build/solaris-bundle.js"
+    "build": "browserify ./src/solaria.js -t [ babelify --presets [ env ] ] -o ./public/js/build/solaria-bundle.js"
   },
   "author": "",
   "license": "ISC"

@@ -4,7 +4,7 @@ import Controls from './controls'
 /**
  * Gère les contrôles (clavier/souris et manette) du joueur
  */
-class SolarisControls extends Controls {
+class SolariaControls extends Controls {
 	
 	constructor() {
 		
@@ -47,4 +47,4 @@ class SolarisControls extends Controls {
 	
 }
 
-export default SolarisControls
+export default SolariaControls
