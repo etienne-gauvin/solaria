@@ -1,3 +1,4 @@
+import EventEmitter from 'events'
 import Chance from 'chance'
 import InventoryUI from './ui/inventory-ui'
 import colors from './colors'
@@ -7,9 +8,11 @@ import Camera from './camera'
 import Controls from './solaris-controls'
 import WoodenChairItem from './items/wooden-chair-item'
 
-class Game {
+class Game extends EventEmitter {
 
 	constructor() {
+
+		super()
 		
 		// Fichiers à charger
 		this.data = {
@@ -87,6 +90,19 @@ class Game {
 	}
 
 	/**
+	 * Initialisation
+	 */
+	init() {
+		
+		// dat.gui
+		this.datgui = new dat.GUI()
+		
+		// Contrôles
+		this.controls = new Controls
+		
+	}
+
+	/**
 	 * Create UI
 	 */
 	createUI() {
@@ -102,9 +118,6 @@ class Game {
 	 */
 	createScene() {
 		
-		// dat.gui
-		this.datgui = new dat.GUI()
-		
 		// Get the width and the height of the screen,
 		// use them to set up the aspect ratio of the camera 
 		// and the size of the renderer.
@@ -117,9 +130,6 @@ class Game {
 		
 		// Random
 		this.chance = new Chance('4536453')
-		
-		// Contrôles
-		this.controls = new Controls
 		
 		// Add a fog effect to the scene same color as the
 		// background color used in the style sheet
@@ -286,6 +296,9 @@ class Game {
 			child.update && child.update(event)
 			
 		})
+
+		// Diffusion de l'event "update"
+		this.emit('update', event)
 		
 		// Mise à jour de la caméra
 		this.camera.update(event)
