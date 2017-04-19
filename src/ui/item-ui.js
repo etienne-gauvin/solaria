@@ -28,7 +28,7 @@ export default class ItemUI {
 	onDragStart(event) {
 		
 		const image = new Image
-		image.src = './images/leaf.svg'
+		image.src = '../images/leaf.svg'
 		
 		event.dataTransfer.dropEffect = 'move'
 		event.dataTransfer.effectAllowed = 'move'
