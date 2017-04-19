@@ -18,14 +18,20 @@
   "devDependencies": {},
   "scripts": {
     "start": "http-server ./public",
-    "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"js,css,server\" \"npm run watch-js\" \"npm run watch-css\" \"npm start\"",
+    
     "prewatch-js": "npm run build-js",
     "watch-js": "watchify ./src/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/build/solaria-bundle.js",
+    
+    "prebuild-js": "shx mkdir -p ./public/build",
     "build-js": "browserify ./src/solaria.js -t [ babelify --presets [ env ] ] -o ./public/build/solaria-bundle.js",
-    "prewatch-css": "npm run build-css",
+    
+    "prebuild-css": "shx mkdir -p ./public/build",
     "build-css": "node-sass --source-map true ./src/scss/solaria.scss --output ./public/build",
+    
+    "prewatch-css": "npm run build-css",
     "watch-css": "node-sass --source-map true --recursive --watch ./src/scss/solaria.scss --output ./public/build",
-    "prebuild": "shx mkdir -p ./public/build",
+
+    "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"js,css,server\" \"npm run watch-js\" \"npm run watch-css\" \"npm start\"",
     "build": "concurrently --prefix \"[{name}]\" --names \"js,css\" \"npm run build-js\" \"npm run build-css\"",
     "watch": "concurrently --prefix \"[{name}]\" --names \"js,css\" \"npm run watch-js\" \"npm run watch-css\""
   },
