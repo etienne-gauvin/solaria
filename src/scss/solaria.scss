@@ -1,0 +1,73 @@
+@import './inventory.scss';
+
+@font-face {
+	font-family: "Curse Casual";
+	src: url("../font/curse-casual.ttf");
+}
+
+html, body {
+	background-color: black;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	
+	font-family: "Curse Casual", sans-serif;
+}
+
+main {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: linear-gradient(#5DBDE5, #86DAFD);
+}
+
+main canvas, main .ui {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+main .ui {
+	z-index: 20;
+}
+
+main canvas {
+	z-index: 10;
+}
+
+main .ui .item {
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-color: #494949;
+	border-radius: 50%;
+	overflow: hidden;
+	color: beige;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	color: transparent;
+	
+	background-image: url("../images/leaf.svg");
+	-webkit-background-size: cover;
+	background-size: cover;
+	
+	transition: 200ms ease-in-out;
+}
+
+main .ui .item:hover {
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+	cursor: grab;
+}
+
+main .ui .item.dragged {
+	opacity: 0.2;
+}
+
+.dg.ac {
+	z-index: 30 !important;
+}

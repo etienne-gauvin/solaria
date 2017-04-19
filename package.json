@@ -11,17 +11,23 @@
     "browserify": "^14.1.0",
     "chance": "^1.0.6",
     "concurrently": "^3.4.0",
+    "node-sass": "^4.5.2",
     "shx": "^0.2.2",
     "uuid": "^3.0.1"
   },
   "devDependencies": {},
   "scripts": {
     "start": "http-server ./public",
-    "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"watch,server\" \"npm run watch\" \"npm start\"",
-    "prewatch": "npm run build",
-    "watch": "watchify ./src/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/js/build/solaria-bundle.js",
-    "prebuild": "shx mkdir -p ./public/js/build",
-    "build": "browserify ./src/solaria.js -t [ babelify --presets [ env ] ] -o ./public/js/build/solaria-bundle.js"
+    "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"js,css,server\" \"npm run watch-js\" \"npm run watch-css\" \"npm start\"",
+    "prewatch-js": "npm run build-js",
+    "watch-js": "watchify ./src/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/build/solaria-bundle.js",
+    "build-js": "browserify ./src/solaria.js -t [ babelify --presets [ env ] ] -o ./public/build/solaria-bundle.js",
+    "prewatch-css": "npm run build-css",
+    "build-css": "node-sass --source-map true ./src/scss/solaria.scss --output ./public/build",
+    "watch-css": "node-sass --source-map true --recursive --watch ./src/scss/solaria.scss --output ./public/build",
+    "prebuild": "shx mkdir -p ./public/build",
+    "build": "concurrently --prefix \"[{name}]\" --names \"js,css\" \"npm run build-js\" \"npm run build-css\"",
+    "watch": "concurrently --prefix \"[{name}]\" --names \"js,css\" \"npm run watch-js\" \"npm run watch-css\""
   },
   "author": "",
   "license": "ISC"

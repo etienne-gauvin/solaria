@@ -1,0 +1,42 @@
+.inventory {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 30vh;
+	background-color: beige;
+	transition: 200ms ease-out;
+
+	&:not(.open) {
+		bottom: -30vh;
+	}
+
+	h1 {
+		margin: 0;
+		padding: 1rem;
+		background-color: #494949;
+		color: beige;
+		font-weight: normal;
+	}
+
+	.items {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 0.5rem;
+
+		.space {
+			display: block;
+			height: 3rem;
+			width: 3rem;
+			margin: 0.5rem;
+			background-color: #f7f7e0;
+			border: 0.15rem dashed #CFCABC;
+			border-radius: 50%;
+			
+			&:not(:empty) {
+				border: 0.15rem solid #494949;
+			}
+		}
+	}
+}
