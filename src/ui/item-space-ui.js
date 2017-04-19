@@ -1,4 +1,5 @@
 import game from '../game'
+import UUID from 'uuid'
 
 export default class ItemSpaceUI {
 
@@ -6,14 +7,21 @@ export default class ItemSpaceUI {
 	 */
 	constructor() {
 		
+		this.uuid = UUID.v4()
+		
 		// Prevent the space to be filled
 		this.locked = false
 
 		// Attached item
-		this._item = null
+		this.item = null
 
 		this.$ = document.createElement('div')
 		this.$.classList.add('space')
+		
+		this.$.setAttribute('data-uuid', this.uuid)
+
+		this.onDragOver = this.onDragOver.bind(this)
+		this.onDrop = this.onDrop.bind(this)
 		
 		this.$.addEventListener('dragover', event => this.onDragOver(event))
 		this.$.addEventListener('drop', event => this.onDrop(event))
@@ -22,7 +30,7 @@ export default class ItemSpaceUI {
 	
 	onDragOver(event) {
 		
-		if (this.isEmpty) {
+		if (!this.locked) {
 			
 			event.preventDefault()
  			event.dataTransfer.dropEffect = 'move'
@@ -39,11 +47,23 @@ export default class ItemSpaceUI {
 		
 			const item = game.items[uuid]
 			
-			if (item && game.items[uuid] && this.isEmpty && !this.locked) {
+			if (item && !this.locked) {
 				
 		 		event.preventDefault()
 		 		
-		 		this.item = game.items[uuid]
+		 		console.log(this.item, item.ui.space)
+		 		
+		 		if (this.item && item.ui.space) {
+		 			
+		 			ItemSpaceUI.exchange(this, item.ui.space)
+		 			
+		 		}
+		 		
+		 		else {
+		 			
+		 			this.fillWith(item)
+		 			
+		 		}
 		 		
 			}
 			
@@ -54,38 +74,48 @@ export default class ItemSpaceUI {
 		else console.log("This isn't an item")
 		
 	}
-	
-	set item(newItem) {
+
+	static exchange(spaceA, spaceB) {
 		
-		const oldItem = this._item
+		const itemA = spaceA.item
+		const itemB = spaceB.item
 		
-		// Empty the space
-		if (!newItem) {
-			
-			if (!this.isEmpty) {
-				
-				this.$.removeChild(this.item.ui.$)
-				this._item = null
-				
-			}
-			
-		}
+		spaceA.empty()
+		spaceB.empty()
 		
-		// Fill with an item
-		else if (newItem && this.isEmpty && !this.locked) {
-			
-			newItem.ui.space = this
-			
-			this.$.appendChild(newItem.ui.$)
-			this._item = newItem
-			
-		}
-		
-		else throw Error("Can't attach fill the ItemSpace with the Item")
+		spaceA.fillWith(itemB)
+		spaceB.fillWith(itemA)
 		
 	}
 	
+	fillWith(newItem, allowExchange = true) {
+		
+		// Fill with an item
+		if (!this.locked) {
+			
+			if (newItem.ui.space) newItem.ui.space.empty()
+			
+			this.$.appendChild(newItem.ui.$)
+			this.item = newItem
+			newItem.ui.space = this
+			
+		}
+		
+		else throw Error("Can't fill the ItemSpace with the Item")
+		
+	}
+
 	empty() {
+		
+		if (!this.isEmpty) {
+			
+			this.$.removeChild(this.item.ui.$)
+			this.item.ui.space = null
+			this.item = null
+			
+			console.log('emptying', this)
+			
+		}
 		
 	}
 	

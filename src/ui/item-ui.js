@@ -1,3 +1,5 @@
+import game from '../game'
+
 export default class ItemUI {
 
 	/**
@@ -12,13 +14,16 @@ export default class ItemUI {
 		this.item = item
 		
 		// Space filled with this item
-		this._space = null
+		this.space = null
 
 		this.$ = document.createElement('div')
 		this.$.classList.add('item')
 		this.$.innerHTML = item.toString()
 		
+		this.$.setAttribute('data-uuid', this.item.uuid)
 		this.$.setAttribute('draggable', 'true')
+		
+		this.$.style.backgroundColor = `hsl(${game.chance.integer({min: 0, max: 360})}, 100%, 50%)`
 		
 		this.$.addEventListener('dragstart', event => this.onDragStart(event))
 		this.$.addEventListener('dragend', event => this.onDragEnd(event))
@@ -45,24 +50,5 @@ export default class ItemUI {
 		this.$.classList.remove('dragged')
 		
 	}
-	
-	/**
-	 * @param <ItemSpaceUI> newSpace
-	 */
-	set space(newSpace) {
-		
-		const oldSpace = this._space
-		
-		if (oldSpace !== null && oldSpace !== newSpace) {
-			
-			oldSpace.item = null
-			
-			// TODO move item visually
-			
-		}
-		
-		this._space = newSpace
-		
-	} 
 	
 }

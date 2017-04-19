@@ -75,8 +75,8 @@ export default class InventoryUI {
 	addItem(item, space = null) {
 		
 		if (!space) space = this.findFreeSpace()
-		
-		if (space) space.item = item
+
+		if (space) space.fillWith(item)
 		
 		else throw new Error('No space available in inventory for this item')
 		
