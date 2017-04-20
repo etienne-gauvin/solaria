@@ -20,10 +20,10 @@
     "start": "http-server ./public",
     
     "prewatch-js": "npm run build-js",
-    "watch-js": "watchify ./src/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/build/solaria-bundle.js",
+    "watch-js": "watchify ./src/js/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/build/solaria-bundle.js",
     
     "prebuild-js": "shx mkdir -p ./public/build",
-    "build-js": "browserify ./src/solaria.js -t [ babelify --presets [ env ] ] -o ./public/build/solaria-bundle.js",
+    "build-js": "browserify ./src/js/solaria.js -t [ babelify --presets [ env ] ] -o ./public/build/solaria-bundle.js",
     
     "prebuild-css": "shx mkdir -p ./public/build",
     "build-css": "node-sass --source-map true ./src/scss/solaria.scss --output ./public/build",
