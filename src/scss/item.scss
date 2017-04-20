@@ -1,0 +1,35 @@
+.item {
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-color: #494949;
+	border-radius: 50%;
+	overflow: hidden;
+	color: beige;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	color: transparent;
+	
+	background-image: url("../images/leaf.svg");
+	-webkit-background-size: cover;
+	background-size: cover;
+	
+	opacity: 1;
+	transform: scale(1);
+	
+	transition: 200ms ease-out;
+
+	&:hover {
+		cursor: -moz-grab;
+		cursor: -webkit-grab;
+		cursor: grab;
+	}
+
+	&.dragged {
+		opacity: 0.2;
+		transform: scale(0.8);
+	}
+}

@@ -1,4 +1,5 @@
 @import './inventory.scss';
+@import './item.scss';
 
 @font-face {
 	font-family: "Curse Casual";
@@ -36,37 +37,6 @@ main canvas {
 	z-index: 10;
 }
 
-main .ui .item {
-	display: block;
-	height: 100%;
-	width: 100%;
-	background-color: #494949;
-	border-radius: 50%;
-	overflow: hidden;
-	color: beige;
-	text-align: center;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	
-	color: transparent;
-	
-	background-image: url("../images/leaf.svg");
-	-webkit-background-size: cover;
-	background-size: cover;
-	
-	transition: 200ms ease-in-out;
-}
-
-main .ui .item:hover {
-	cursor: -moz-grab;
-	cursor: -webkit-grab;
-	cursor: grab;
-}
-
-main .ui .item.dragged {
-	opacity: 0.2;
-}
 
 .dg.ac {
 	z-index: 30 !important;
