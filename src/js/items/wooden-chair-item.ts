@@ -2,11 +2,9 @@ import Item from '../item'
 
 export default class WoodenChairItem extends Item {
 
-	constructor(uuid) {
+	constructor() {
 		
-		super(uuid, 'Wooden Chair')
-
-
+		super('Wooden Chair')
 		
 	}
 

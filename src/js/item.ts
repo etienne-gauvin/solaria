@@ -1,10 +1,16 @@
 import game from './game'
 import ItemUI from './ui/item-ui'
-import UUID from 'uuid'
+import * as UUID from 'uuid'
 
 export default class Item {
 
-	constructor(name = '?') {
+	public readonly uuid: string
+
+	public readonly name: string
+
+	private _ui: ItemUI
+
+	constructor(name: string = '?') {
 		
 		this.uuid = UUID.v4()
 		this.name = name
@@ -14,7 +20,7 @@ export default class Item {
 
 	}
 	
-	get ui() {
+	public get ui() {
 		
 		if (this._ui === null) this._ui = new ItemUI(this)
 		
@@ -22,7 +28,7 @@ export default class Item {
 		
 	}
 
-	toString() {
+	public toString() {
 
 		return this.name
 

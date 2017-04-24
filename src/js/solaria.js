@@ -14,6 +14,8 @@ window.addEventListener('load', function () {
 		window.game = game
 		
 		game.loop()
+
+		game.scene.visible = false
 		
 	})
 	

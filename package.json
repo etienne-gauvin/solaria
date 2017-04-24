@@ -4,33 +4,28 @@
   "description": "",
   "main": "build/js/solaria-bundle.js",
   "dependencies": {
-    "babel": "^6.5.2",
-    "babel-preset-env": "^1.3.3",
-    "babel-preset-react": "^6.23.0",
-    "babelify": "^7.3.0",
-    "browserify": "^14.1.0",
+    "@types/node": "^7.0.13",
+    "@types/uuid": "^2.0.29",
+    "awesome-typescript-loader": "^3.1.2",
     "chance": "^1.0.6",
     "concurrently": "^3.4.0",
     "node-sass": "^4.5.2",
     "shx": "^0.2.2",
-    "uuid": "^3.0.1"
+    "source-map-loader": "^0.2.1",
+    "typescript": "^2.2.2",
+    "uuid": "^3.0.1",
+    "webpack": "^2.4.1"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "http-server ./public",
-    
     "prewatch-js": "npm run build-js",
-    "watch-js": "watchify ./src/js/solaria.js --verbose -t [ babelify --presets [ env ] ] --debug -o ./public/build/solaria-bundle.js",
-    
+    "watch-js": "webpack --watch --progress",
     "prebuild-js": "shx mkdir -p ./public/build",
-    "build-js": "browserify ./src/js/solaria.js -t [ babelify --presets [ env ] ] -o ./public/build/solaria-bundle.js",
-    
+    "build-js": "webpack",
     "prebuild-css": "shx mkdir -p ./public/build",
     "build-css": "node-sass --source-map true ./src/scss/solaria.scss --output ./public/build",
-    
     "prewatch-css": "npm run build-css",
     "watch-css": "node-sass --source-map true --recursive --watch ./src/scss/solaria.scss --output ./public/build",
-
     "start-n-watch": "concurrently --prefix \"[{name}]\" --names \"js,css,server\" \"npm run watch-js\" \"npm run watch-css\" \"npm start\"",
     "build": "concurrently --prefix \"[{name}]\" --names \"js,css\" \"npm run build-js\" \"npm run build-css\"",
     "watch": "concurrently --prefix \"[{name}]\" --names \"js,css\" \"npm run watch-js\" \"npm run watch-css\""

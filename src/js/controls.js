@@ -2,6 +2,7 @@ import EventEmitter from 'events'
 
 class Action extends EventEmitter {
 
+
 	constructor(name, { keys = [], buttons = [] }) {
 
 		super()
@@ -203,28 +204,32 @@ export default class Controls {
 	 * @param <Object> keyboardKeys : { positive: <String>, negative: <String> }
 	 */
 	getAxis(gamepadAxisIndex, keyboardKeys) {
+
+		let axis = 0
 		
 		switch (this.controller) {
 			
 			case 'gamepad':
 				
-				if (this.values.gamepad === null) return 0
-				
-				return this.values.gamepad.axes[gamepadAxisIndex]
+				if (this.values.gamepad !== null) {
+
+					axis = this.values.gamepad.axes[gamepadAxisIndex]
+
+				}
 				
 				break
 			
 			default:
 			case 'keyboard':
 			
-				let positive = this.values.keyboard[keyboardKeys.positive] ? +1 : 0
-				let negative = this.values.keyboard[keyboardKeys.negative] ? -1 : 0
+				const positive = this.values.keyboard[keyboardKeys.positive] ? +1 : 0
+				const negative = this.values.keyboard[keyboardKeys.negative] ? -1 : 0
 				
-				return positive + negative
-				
-				break
+				axis = positive + negative
 			
 		}
+
+		return axis
 		
 	}
 
