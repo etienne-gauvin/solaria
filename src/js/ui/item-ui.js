@@ -23,10 +23,20 @@ export default class ItemUI {
 		this.$.setAttribute('data-uuid', this.item.uuid)
 		this.$.setAttribute('draggable', 'true')
 		
-		this.$.style.backgroundColor = `hsl(${game.chance.integer({min: 0, max: 360})}, 100%, 50%)`
+		//this.$.style.backgroundColor = `hsl(${game.chance.integer({min: 0, max: 360})}, 100%, 50%)`
 		
 		this.$.addEventListener('dragstart', event => this.onDragStart(event))
 		this.$.addEventListener('dragend', event => this.onDragEnd(event))
+
+		this.$.addEventListener('animationend', event => {
+			
+			if (event.animationName === 'appears') {
+
+				this.$.classList.remove(event.animationName)
+				
+			}
+
+		})
 		
 	}
 	
@@ -49,6 +59,21 @@ export default class ItemUI {
 		
 		this.$.classList.remove('dragged')
 		
+	}
+
+	appears() {
+
+		this.$.classList.add('appears')
+
+	}
+
+	/**
+	 * @param <ItemSpaceUI> space
+	 */
+	animateTranslationTo(space) {
+
+
+
 	}
 	
 }

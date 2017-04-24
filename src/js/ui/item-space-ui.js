@@ -1,5 +1,4 @@
 import game from '../game'
-import UUID from 'uuid'
 
 export default class ItemSpaceUI {
 
@@ -7,19 +6,12 @@ export default class ItemSpaceUI {
 	 */
 	constructor() {
 		
-		this.uuid = UUID.v4()
-		
-		// Prevent the space to be filled
-		this.locked = false
-
 		// Attached item
 		this.item = null
 
 		this.$ = document.createElement('div')
 		this.$.classList.add('space')
 		
-		this.$.setAttribute('data-uuid', this.uuid)
-
 		this.onDragOver = this.onDragOver.bind(this)
 		this.onDrop = this.onDrop.bind(this)
 		
@@ -30,13 +22,9 @@ export default class ItemSpaceUI {
 	
 	onDragOver(event) {
 		
-		if (!this.locked) {
-			
-			event.preventDefault()
- 			event.dataTransfer.dropEffect = 'move'
-		
-		}
-		
+		event.preventDefault()
+		event.dataTransfer.dropEffect = 'move'
+	
 	}
 	
 	onDrop(event) {
@@ -45,25 +33,22 @@ export default class ItemSpaceUI {
 		
 		if (uuid) {
 		
-			const item = game.items[uuid]
+			const droppedItem = game.items[uuid]
 			
-			if (item && !this.locked) {
+			if (droppedItem) {
 				
 		 		event.preventDefault()
 		 		
-		 		console.log(this.item, item.ui.space)
-		 		
-		 		if (this.item && item.ui.space) {
+		 		const remoteSpace = droppedItem.ui.space
+
+		 		if (!this.isEmpty && remoteSpace) {
 		 			
-		 			ItemSpaceUI.exchange(this, item.ui.space)
-		 			
+		 			remoteSpace.removeItem()
+		 			remoteSpace.appendItem(this.item, 'translate')
+
 		 		}
 		 		
-		 		else {
-		 			
-		 			this.fillWith(item)
-		 			
-		 		}
+	 			this.appendItem(droppedItem)
 		 		
 			}
 			
@@ -75,25 +60,49 @@ export default class ItemSpaceUI {
 		
 	}
 
-	static exchange(spaceA, spaceB) {
-		
-		const itemA = spaceA.item
-		const itemB = spaceB.item
-		
-		spaceA.empty()
-		spaceB.empty()
-		
-		spaceA.fillWith(itemB)
-		spaceB.fillWith(itemA)
-		
-	}
-	
-	fillWith(newItem, allowExchange = true) {
+	/**
+	 * @param <Item> item
+	 * @param <String> animation = drop|translate
+	 */
+	appendItem(newItem, animation = 'drop') {
 		
 		// Fill with an item
 		if (!this.locked) {
 			
-			if (newItem.ui.space) newItem.ui.space.empty()
+			const remoteSpace = newItem.ui.space
+
+			switch (animation) {
+
+				case 'translate':
+
+					if (!remoteSpace) throw new Error("Can't translate from non existant space")
+
+					else {
+
+						const {
+							offsetWidth,
+							offsetHeight,
+							offsetLeft,
+							offsetTop
+						} = newItem.ui.$
+
+						remoteSpace.removeItem()
+
+						newItem.ui
+						
+					}
+
+
+					break
+
+				case 'drop':
+				default:
+					
+					if (remoteSpace) remoteSpace.removeItem()
+
+					break
+
+			}
 			
 			this.$.appendChild(newItem.ui.$)
 			this.item = newItem
@@ -101,21 +110,25 @@ export default class ItemSpaceUI {
 			
 		}
 		
-		else throw Error("Can't fill the ItemSpace with the Item")
+		else if (this.locked) throw Error("ItemSpace is locked")
 		
 	}
 
-	empty() {
+	removeItem() {
 		
 		if (!this.isEmpty) {
 			
+			const removedItem = this.item
+
 			this.$.removeChild(this.item.ui.$)
 			this.item.ui.space = null
 			this.item = null
-			
-			console.log('emptying', this)
+
+			return removedItem
 			
 		}
+
+		else throw new Error('ItemSpace is already empty')
 		
 	}
 	

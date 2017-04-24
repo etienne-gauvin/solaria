@@ -1,3 +1,15 @@
+@keyframes appears {
+	from {
+		transform: scale(0.8);
+		opacity: 0.2;
+	}
+
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
 .item {
 	display: block;
 	height: 100%;
@@ -31,5 +43,9 @@
 	&.dragged {
 		opacity: 0.2;
 		transform: scale(0.8);
+	}
+
+	&.appears {
+		animation: 200ms ease-out appears;
 	}
 }

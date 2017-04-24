@@ -10,17 +10,28 @@ export default class Inventory extends EventEmitter  {
 		
 		this.ui = null
 		
-		this.items = []
+		this.items = new Array(15)
 		
 	}
 
 	/**
-	 * Add item
+	 * Add an item in the first free space
+	 * @param <Item>
 	 */
 	add(item) {
 
-		this.items.push(item)
-		this.emit('item-added', item)
+		const freeSpace = this.items.findIndex(item => !item)
+
+		if (freeSpace >= 0) {
+
+			this.items[freeSpace] = item
+			
+			this.emit('item-added', {
+				item: item,
+				index: freeSpace
+			})
+
+		}
 
 	}
 

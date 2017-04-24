@@ -7,32 +7,17 @@ export default class InventoryUI {
 	constructor() {
 
 		this.inventory = null
-		
-		this.spaces = []
-		
-		this.$container = document.querySelector('.inventory')
-		this.$items = this.$container.querySelector('.items')
 
-		this.createElements()
+		this.spaces = null
+		
+		this.$ = document.querySelector('.inventory')
+		this.$spaces = this.$.querySelector('.items')
 
-		this.onItemAdded = this.onItemAdded.bind(this)
-		this.onItemRemoved = this.onItemRemoved.bind(this)
+		this.onItemAddedInInventory = this.onItemAddedInInventory.bind(this)
+		this.onItemRemovedFromInventory = this.onItemRemovedFromInventory.bind(this)
 
 		this.onInventoryButtonPressed = this.onInventoryButtonPressed.bind(this)
 
-	}
-	
-	createElements() {
-		
-		for (let i = 0; i < 15; i++) {
-			
-			const space = new ItemSpaceUI
-			
-			this.spaces.push(space)
-			this.$items.appendChild(space.$)
-			
-		}
-		
 	}
 	
 	onDropOnSpace(event) {
@@ -41,60 +26,93 @@ export default class InventoryUI {
 		
 	}
 
+	/**
+	 * Attach to an inventory
+	 * @param <Inventory>
+	 */
 	attach(inventory) {
 		
 		this.inventory = inventory
 
-		this.inventory.addListener('item-added', this.onItemAdded)
-		this.inventory.addListener('item-removed', this.onItemRemoved)
+		const itemCount = this.inventory.items.length
 
-		this.inventory.items.forEach(item => this.addItem(item))
+		this.spaces = new Array(itemCount)
+		
+		for (let i = 0; i < itemCount; i++) {
+
+			const space = new ItemSpaceUI
+
+			this.spaces[i] = space
+
+			this.$spaces.appendChild(space.$)
+
+		}
+		
+		this.inventory.addListener('item-added', this.onItemAddedInInventory)
+		this.inventory.addListener('item-removed', this.onItemRemovedFromInventory)
 
 		// Open/close the inventory listener
 		game.controls.actions.inventory.addListener('pressed', this.onInventoryButtonPressed)
 
 	}
 
+	/**
+	 * Detach the inventory
+	 */
 	detach() {
-
-		this.inventory.removeListener('item-added', this.onItemAdded)
-		this.inventory.removeListener('item-removed', this.onItemRemoved)
-		
-		game.controls.actions.inventory.removeListener('pressed', this.onInventoryButtonPressed)
 
 		this.inventory = null
 
+		this.spaces = null
+
+		this.inventory.removeListener('item-added', this.onItemAddedInInventory)
+		this.inventory.removeListener('item-removed', this.onItemRemovedFromInventory)
+		
+		game.controls.actions.inventory.removeListener('pressed', this.onInventoryButtonPressed)
+
 	}
 
-	onItemAdded(item) {
+	/**
+	 * @param <Item> item
+	 */
+	onItemAddedInInventory({ item, index }) {
 
-		this.addItem(item)
+		this.addItem({
+			item: item,
+			space: this.spaces[index]
+		})
 
 	}
 
-	addItem(item, space = null) {
+	/**
+	 * @param <Item> item
+	 * @param <Item> ItemSpaceUI
+	 */
+	addItem({ item, space }) {
 		
-		if (!space) space = this.findFreeSpace()
-
-		if (space) space.fillWith(item)
-		
-		else throw new Error('No space available in inventory for this item')
+		space.appendItem(item)
 		
 	}
 
-	onItemRemoved(item) {
+	/**
+	 * @param <Item> item
+	 */
+	onItemRemovedFromInventory(item) {
 
 		this.removeItem(item)
 
 	}
 
+	/**
+	 * @param <Item> item
+	 */
 	removeItem(item) {
 
-		const index = this.itemUIs.findIndex(itemUI => itemUI.item === item)
+		const space = this.spaces.find(space => space.item === item)
 
-		this.itemUIs.splice(index, 1)
-		
-		this.$items.removeChild(item.ui.$)
+		if (space) space.removeItem()
+
+		else throw new Error("Can't remove inexistant item.")
 
 	}
 
@@ -105,29 +123,22 @@ export default class InventoryUI {
 	}
 	
 	/**
-	 * Return a free space or undefined
-	 * @return <ItemSpace>
+	 * @return <Boolean>
 	 */
-	 
-	findFreeSpace() {
-		
-		return this.spaces.find(space => space.isEmpty)
-		
-	}
-	
 	get open() {
 		
-		return this.$container.classList.contains('open')
+		return this.$.classList.contains('open')
 		
 	}
 	
+	/**
+	 * @param <Boolean> open
+	 */
 	set open(open) {
 		
-		if (open)
-			this.$container.classList.add('open')
+		if (open) this.$.classList.add('open')
 		
-		else
-			this.$container.classList.remove('open')
+		else this.$.classList.remove('open')
 		
 	}
 	

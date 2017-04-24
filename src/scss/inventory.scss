@@ -33,6 +33,10 @@
 			background-color: #f7f7e0;
 			border: 0.15rem dashed #CFCABC;
 			border-radius: 50%;
+
+			&.destinationOfAnimation {
+				position: relative;
+			}
 			
 			&:not(:empty) {
 				border: 0.15rem solid #494949;
