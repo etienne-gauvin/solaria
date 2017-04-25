@@ -84,7 +84,7 @@ export default class Controls {
 	
 	public readonly actions: { [key: string]: Action } = {}
 	
-	public readonly actionsArray: Array<Action>
+	public readonly actionsArray: Array<Action> = new Array
 	
 	constructor() {
 
@@ -282,10 +282,8 @@ export default class Controls {
 	
 	/**
 	 * Create an action and a shortcut
-	 * @param <String> name
-	 * @param <Object> {<String[]> keys, <Number[]> buttons}
 	 */
-	createAction(name, { keys, buttons }) {
+	createAction(name: string, keys: Array<string|number>, buttons: Array<number>): void {
 
 		const action = new Action(name, keys, buttons)
 

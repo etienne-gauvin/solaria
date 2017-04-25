@@ -1,4 +1,5 @@
 import game from './game'
+import * as THREE from 'three'
 const PI = Math.PI
 
 /**
@@ -6,6 +7,21 @@ const PI = Math.PI
  */
 class Character extends THREE.SkinnedMesh {
 	
+	// Gestionnaire des animations
+	public readonly mixer: THREE.AnimationMixer = new THREE.AnimationMixer(this)
+	
+	// Vitesse de déplacement
+	public readonly velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
+
+	// Vitesse de déplacement maximale
+	public readonly maxVelocity = 0.1
+
+	// Animations
+	public readonly actions: {[key: string]: THREE.AnimationAction} = {}
+	
+	// Geometry
+	public geometry: THREE.Geometry
+
 	/**
 	 * Player constructor
 	 */
@@ -15,15 +31,6 @@ class Character extends THREE.SkinnedMesh {
 		
 		this.castShadow = true
 		this.receiveShadow = false
-		
-		// Gestionnaire des animations
-		this.mixer = new THREE.AnimationMixer(this)
-		
-		// Vitesse de déplacement
-		this.velocity = new THREE.Vector3(0, 0, 0)
-		
-		// Vitesse de déplacement maximale
-		this.maxVelocity = 0.1
 		
 		// Rotation du modèle 3D
 		this.geometry.rotateX(Math.PI / 2)
@@ -49,10 +56,8 @@ class Character extends THREE.SkinnedMesh {
 	
 	/**
 	 * Mise à jour
-	 * @param <Event> update event
-	 * @param <Vector2> control
 	 */
-	updateMovement(event, control) {
+	updateMovement(event, control: THREE.Vector2) {
 		
 		// Force appliquée sur le joystick
 		const force = control.length()
@@ -69,7 +74,6 @@ class Character extends THREE.SkinnedMesh {
 		
 		// Application de la vitesse sur la position
 		this.position.add(this.velocity)
-		
 		
 		// Rotation du personnage
 		const targetRotation = Math.atan2(this.velocity.y, this.velocity.x)

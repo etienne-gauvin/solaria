@@ -1,12 +1,15 @@
 import game from './game'
 import Character from './character'
 import Inventory from './inventory'
-const PI = Math.PI
+import * as THREE from 'three'
 
 /**
  * Class Player
  */
-class Player extends Character {
+export default class Player extends Character {
+
+	// Inventaire
+	public inventory: Inventory
 
 	/**
 	 * Player constructor
@@ -17,18 +20,19 @@ class Player extends Character {
 		
 		const materials = game.data.models.player.materials
 		const material = new THREE.MeshLambertMaterial({
-			color: new THREE.Color('#F6C357'),
+			color: 0xF6C357,
 			skinning: true
 		})
 		
 		super(geometry, material)
 		
 		this.name = "Player"
+
+		this.inventory = new Inventory
 		
 		game.scene.add(this)
 
-		// Inventaire
-		this.inventory = new Inventory
+		console.log('hello')
 
 		// dat.GUI
 		const playerPosFolder = game.datgui.addFolder('Player')
@@ -57,6 +61,3 @@ class Player extends Character {
 	}
 
 }
-
-export default Player
-

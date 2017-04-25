@@ -1,5 +1,5 @@
 import * as EventEmitter from 'events'
-import Chance from 'chance'
+import * as Chance from 'chance'
 import InventoryUI from './ui/inventory-ui'
 import Color from './color'
 import Ground from './ground'
@@ -68,7 +68,7 @@ class Game extends EventEmitter {
 	/**
 	 * dat.GUI
 	 */
-	public datgui: dat.GUI
+	public datgui: dat.GUI = new dat.GUI
 	
 	/**
 	 * UI Objects
@@ -92,7 +92,7 @@ class Game extends EventEmitter {
 	public scene: THREE.Scene
 	
 	// Chance
-	public readonly chance: Chance = new Chance('4536453')
+	public readonly chance = new Chance
 	
 	// Renderer
 	public renderer: THREE.WebGLRenderer
@@ -164,8 +164,6 @@ class Game extends EventEmitter {
 	init() {
 		
 		this.controls = new Controls
-		
-		this.datgui = new dat.GUI
 		
 	}
 

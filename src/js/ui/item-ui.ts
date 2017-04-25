@@ -1,21 +1,21 @@
 import game from '../game'
+import Item from '../item'
+import ItemSpaceUI from './item-space-ui'
 
 export default class ItemUI {
 
-	/**
-	 * @param <Item> item
-	 */
-	constructor(item) {
-		
-		// Prevent the item to be moved by the user
-		this.locked = false
+	public item: Item
 
-		// Attached item
+	public space: ItemSpaceUI
+
+	public $: HTMLElement
+
+	/**
+	 */
+	constructor(item: Item) {
+
 		this.item = item
 		
-		// Space filled with this item
-		this.space = null
-
 		this.$ = document.createElement('div')
 		this.$.classList.add('item')
 		this.$.innerHTML = item.toString()
@@ -28,7 +28,7 @@ export default class ItemUI {
 		this.$.addEventListener('dragstart', event => this.onDragStart(event))
 		this.$.addEventListener('dragend', event => this.onDragEnd(event))
 
-		this.$.addEventListener('animationend', event => {
+		this.$.addEventListener('animationend', (event: AnimationEvent) => {
 			
 			if (event.animationName === 'appears') {
 
@@ -67,10 +67,7 @@ export default class ItemUI {
 
 	}
 
-	/**
-	 * @param <ItemSpaceUI> space
-	 */
-	animateTranslationTo(space) {
+	animateTranslationTo(space: ItemSpaceUI) {
 
 
 

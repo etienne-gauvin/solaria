@@ -11,7 +11,7 @@ class SolariaControls extends Controls {
 		super()
 
 		// Open/close the inventory
-		this.createAction('inventory', { keys: [ 'Tab' ], buttons: [ this.GAMEPAD.Y ] })
+		this.createAction('inventory', [ 'Tab' ], [ this.GAMEPAD.Y ])
 
 		// dat.GUI
 		const controlsFolder = game.datgui.addFolder('Controls')
@@ -21,7 +21,7 @@ class SolariaControls extends Controls {
 		
 	}
 	
-	get mainAxisX() {
+	get mainAxisX(): number {
 		
 		return this.getAxis(
 			this.GAMEPAD.LEFT_X,
@@ -33,7 +33,7 @@ class SolariaControls extends Controls {
 		
 	}
 	
-	get mainAxisY() {
+	get mainAxisY(): number {
 		
 		return this.getAxis(
 			this.GAMEPAD.LEFT_Y,

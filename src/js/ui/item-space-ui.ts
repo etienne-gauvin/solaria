@@ -1,14 +1,16 @@
 import game from '../game'
+import Item from '../item'
 
 export default class ItemSpaceUI {
+
+	public item: Item
+
+	public $: Element
 
 	/**
 	 */
 	constructor() {
 		
-		// Attached item
-		this.item = null
-
 		this.$ = document.createElement('div')
 		this.$.classList.add('space')
 		
@@ -33,7 +35,7 @@ export default class ItemSpaceUI {
 		
 		if (uuid) {
 		
-			const droppedItem = game.items[uuid]
+			const droppedItem = Item.get(uuid)
 			
 			if (droppedItem) {
 				
@@ -52,69 +54,58 @@ export default class ItemSpaceUI {
 		 		
 			}
 			
-			else throw new Error("Impossible to find an item with this UUID", uuid)
+			else throw new Error("Impossible to find an item with this UUID: " + uuid)
 		
 		}
 	
-		else console.log("This isn't an item")
+		else console.error("This isn't an item")
 		
 	}
 
-	/**
-	 * @param <Item> item
-	 * @param <String> animation = drop|translate
-	 */
-	appendItem(newItem, animation = 'drop') {
+	appendItem(newItem: Item, animation: string = 'drop') {
 		
-		// Fill with an item
-		if (!this.locked) {
-			
-			const remoteSpace = newItem.ui.space
+		const remoteSpace = newItem.ui.space
 
-			switch (animation) {
+		switch (animation) {
 
-				case 'translate':
+			case 'translate':
 
-					if (!remoteSpace) throw new Error("Can't translate from non existant space")
+				if (!remoteSpace) throw new Error("Can't translate from non existant space")
 
-					else {
+				else {
 
-						const {
-							offsetWidth,
-							offsetHeight,
-							offsetLeft,
-							offsetTop
-						} = newItem.ui.$
+					const {
+						offsetWidth,
+						offsetHeight,
+						offsetLeft,
+						offsetTop
+					} = newItem.ui.$
 
-						remoteSpace.removeItem()
+					remoteSpace.removeItem()
 
-						newItem.ui
-						
-					}
-
-
-					break
-
-				case 'drop':
-				default:
+					newItem.ui
 					
-					if (remoteSpace) remoteSpace.removeItem()
+				}
 
-					break
 
-			}
-			
-			this.$.appendChild(newItem.ui.$)
-			this.item = newItem
-			newItem.ui.space = this
-			
+				break
+
+			case 'drop':
+			default:
+				
+				if (remoteSpace) remoteSpace.removeItem()
+
+				break
+
 		}
 		
-		else if (this.locked) throw Error("ItemSpace is locked")
+		this.$.appendChild(newItem.ui.$)
+		this.item = newItem
+		newItem.ui.space = this
 		
 	}
 
-	removeItem() {
+	removeItem(): Item {
 		
 		if (!this.isEmpty) {
 			
@@ -132,7 +123,7 @@ export default class ItemSpaceUI {
 		
 	}
 	
-	get isEmpty() {
+	get isEmpty(): boolean {
 		
 		return !this.item
 		
