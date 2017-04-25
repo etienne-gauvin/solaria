@@ -1,43 +1,109 @@
-import EventEmitter from 'events'
+import * as EventEmitter from 'events'
 import Chance from 'chance'
 import InventoryUI from './ui/inventory-ui'
-import colors from './colors'
+import Color from './color'
 import Ground from './ground'
 import Player from './player'
 import Camera from './camera'
 import Controls from './solaria-controls'
 import WoodenChairItem from './items/wooden-chair-item'
+import * as UUID from 'uuid'
+import * as THREE from 'three'
+import * as dat from 'dat-gui'
+
+interface ThreeModel {
+	path: string
+	geometry: THREE.Geometry
+	materials: Array<THREE.Material>
+}
+
+interface Data {
+	models: {
+		[key: string]: ThreeModel
+	}
+}
 
 class Game extends EventEmitter {
-
-	constructor() {
+	
+	/**
+	 * Files to load
+	 */
+	public readonly data: Data = {
+		models: {
+			player: {
+				path: '../models/player.json',
+				geometry: null,
+				materials: null
+			}
+		}
+	}
+	
+	/**
+	 * Current loop event
+	 */
+	public readonly event = {
+		delta: 0,
+		time: 0
+	}
+	
+	/**
+	 * The unique Game instance
+	 */
+	private static instance: Game
+	
+	/**
+	 * Constructor
+	 */
+	private constructor() {
 
 		super()
 		
-		// Fichiers à charger
-		this.data = {
-			models: {
-				player: {
-					path: '../models/player.json'
-				}
-			}
-		}
-
-		// Évènement de mise à jour
-		this.event = {
-			delta: 0,
-			time: 0
-		}
-		
-		// Liste de tous les items
-		this.items = {}
-
 	}
+	
+	/**
+	 * dat.GUI
+	 */
+	public controls: Controls
+	
+	/**
+	 * dat.GUI
+	 */
+	public datgui: dat.GUI
+	
+	/**
+	 * UI Objects
+	 */
+	public readonly ui: { [key: string]: any } = {}
+	
+	/**
+	 * Game instance
+	 */
+	public static getInstance(): Game {
+		
+		return this.instance || new Game
+		
+	}
+	
+	// Display size
+	public width: number
+	public height: number
+	
+	// Current Scene
+	public scene: THREE.Scene
+	
+	// Chance
+	public readonly chance: Chance = new Chance('4536453')
+	
+	// Renderer
+	public renderer: THREE.WebGLRenderer
+	
+	// Camera
+	public camera: Camera
 
 	/**
 	 * Charger les fichiers
 	 */
-	load(callback) {
+	load(callback): Promise<Function> {
 
 		return this.loadModels().then(callback)
 
@@ -46,9 +112,9 @@ class Game extends EventEmitter {
 	/**
 	 * Charger les fichiers
 	 */
-	loadModels(callback) {
+	loadModels(callback: Function = null): Promise<Function> {
 
-		return new Promise((resolve, reject) => {
+		return new Promise<Function>((resolve: Function, reject: Function) => {
 
 			const models = this.data.models
 
@@ -56,14 +122,14 @@ class Game extends EventEmitter {
 			const loader = new THREE.JSONLoader()
 			
 			// Vérifier qu'un fichier est chargé
-			const isLoaded = file => file.geometry !== undefined || file.materials !== undefined
+			const isLoaded = file => file.geometry || file.materials
 
 			// Charger chaque fichier
 			for (let f in models) {
 				
 				let file = models[f]
 				
-				if (! isLoaded(file)) {
+				if (!isLoaded(file)) {
 					
 					loader.load(file.path, (geometry, materials) => {
 						
@@ -97,11 +163,9 @@ class Game extends EventEmitter {
 	 */
 	init() {
 		
-		// dat.gui
-		this.datgui = new dat.GUI()
-		
-		// Contrôles
 		this.controls = new Controls
+		
+		this.datgui = new dat.GUI
 		
 	}
 
@@ -109,8 +173,6 @@ class Game extends EventEmitter {
 	 * Create UI
 	 */
 	createUI() {
-
-		this.ui = Object.create(null)
 
 		this.ui.inventory = new InventoryUI
 
@@ -130,9 +192,6 @@ class Game extends EventEmitter {
 		// Create the scene
 		this.scene = new THREE.Scene()
 		this.datgui.add(this.scene, 'visible').name('Scene Visible')
-		
-		// Random
-		this.chance = new Chance('4536453')
 		
 		// Add a fog effect to the scene same color as the
 		// background color used in the style sheet
@@ -177,7 +236,10 @@ class Game extends EventEmitter {
 		}, false)
 		
 	}
-
+	
+	// Shadow Light
+	public shadowLight: THREE.Light
+	
 	/**
 	 * Création des lumières
 	 */
@@ -186,12 +248,7 @@ class Game extends EventEmitter {
 		// A hemisphere light is a gradient colored light; 
 		// the first parameter is the sky color, the second parameter is the ground color, 
 		// the third parameter is the intensity of the light
-		const hemisphereLight = new THREE.HemisphereLight(
-			new THREE.Color("#FFFFFF"),
-			new THREE.Color("#FFFFFF"),
-			1
-		)
-		
+		const hemisphereLight = new THREE.HemisphereLight(Color.White, Color.White, 1)
 		
 		// A directional light shines from a specific direction. 
 		// It acts like the sun, that means that all the rays produced are parallel. 
@@ -205,12 +262,12 @@ class Game extends EventEmitter {
 		// shadowLight.shadowCameraVisible = true
 
 		// // define the visible area of the projected shadow
-		shadowLight.shadow.camera.left = -20
+		/*shadowLight.shadow.camera.left = -20
 		shadowLight.shadow.camera.right = 20
 		shadowLight.shadow.camera.top = 20
 		shadowLight.shadow.camera.bottom = -20
 		shadowLight.shadow.camera.near = 1
-		shadowLight.shadow.camera.far = 1000
+		shadowLight.shadow.camera.far = 1000*/
 
 		// define the resolution of the shadow; the higher the better, 
 		// but also the more expensive and less performant
@@ -221,6 +278,10 @@ class Game extends EventEmitter {
 		this.scene.add(shadowLight)
 		this.scene.add(hemisphereLight)
 	}
+	
+	public ground: Ground
+	
+	public player: Player
 
 	/**
 	 * Création du sol
@@ -251,7 +312,7 @@ class Game extends EventEmitter {
 		let material
 		
 		if (dashed) {
-			material = THREE.LineDashedMaterial({
+			material = new THREE.LineDashedMaterial({
 				color: color,
 				dashSize: 2,
 				gapSize: 3
@@ -291,7 +352,7 @@ class Game extends EventEmitter {
 		this.controls.update(event)
 		
 		// Mise à jour des objets
-		this.scene.traverseVisible((child) => {
+		this.scene.traverseVisible((child: any) => {
 			
 			if (child.name && child.name.match(/^Line/)) {
 				child.geometry.verticesNeedUpdate = true
@@ -317,6 +378,4 @@ class Game extends EventEmitter {
 
 }
 
-
-
-export default new Game
+export default Game.getInstance()

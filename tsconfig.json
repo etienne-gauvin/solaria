@@ -2,10 +2,10 @@
     "compilerOptions": {
         "outDir": "./public/build/",
         "sourceMap": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "moduleResolution": "node",
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "allowJs": true,
         "traceResolution": true
     },

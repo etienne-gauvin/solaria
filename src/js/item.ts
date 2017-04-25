@@ -3,6 +3,8 @@ import ItemUI from './ui/item-ui'
 import * as UUID from 'uuid'
 
 export default class Item {
+	
+	private static items: { [key: string]: Item } = {}
 
 	public readonly uuid: string
 
@@ -16,7 +18,7 @@ export default class Item {
 		this.name = name
 		this._ui = null
 		
-		game.items[this.uuid] = this
+		Item.items[this.uuid] = this
 
 	}
 	
@@ -32,6 +34,12 @@ export default class Item {
 
 		return this.name
 
+	}
+	
+	public static get(uuid: string): Item {
+		
+		return this.items[uuid]
+		
 	}
 
 }

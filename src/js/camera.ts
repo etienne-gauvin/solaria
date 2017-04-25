@@ -1,6 +1,9 @@
 import game from './game'
+import * as THREE from 'three'
 
-class Camera extends THREE.PerspectiveCamera {
+export default class Camera extends THREE.PerspectiveCamera {
+	
+	private distanceToPlayer: THREE.Vector3
 	
 	constructor() {
 		
@@ -42,5 +45,3 @@ class Camera extends THREE.PerspectiveCamera {
 		
 	}
 }
-
-export default Camera

@@ -1,15 +1,22 @@
 import game from '../game'
 import ItemUI from './item-ui'
 import ItemSpaceUI from './item-space-ui'
+import Inventory from '../inventory'
+import Item from '../item'
+import Controls from '../controls'
 
 export default class InventoryUI {
-
+	
+	private inventory: Inventory
+	
+	private spaces: Array<ItemSpaceUI>
+	
+	private $: Element
+	
+	private $spaces: Element
+	
 	constructor() {
 
-		this.inventory = null
-
-		this.spaces = null
-		
 		this.$ = document.querySelector('.inventory')
 		this.$spaces = this.$.querySelector('.items')
 
@@ -30,7 +37,7 @@ export default class InventoryUI {
 	 * Attach to an inventory
 	 * @param <Inventory>
 	 */
-	attach(inventory) {
+	attach(inventory: Inventory) {
 		
 		this.inventory = inventory
 
@@ -75,20 +82,13 @@ export default class InventoryUI {
 	/**
 	 * @param <Item> item
 	 */
-	onItemAddedInInventory({ item, index }) {
+	onItemAddedInInventory(item: Item, index: number) {
 
-		this.addItem({
-			item: item,
-			space: this.spaces[index]
-		})
+		this.addItem(item, this.spaces[index])
 
 	}
 
-	/**
-	 * @param <Item> item
-	 * @param <Item> ItemSpaceUI
-	 */
-	addItem({ item, space }) {
+	addItem(item: Item, space: ItemSpaceUI) {
 		
 		space.appendItem(item)
 		
@@ -97,16 +97,13 @@ export default class InventoryUI {
 	/**
 	 * @param <Item> item
 	 */
-	onItemRemovedFromInventory(item) {
+	onItemRemovedFromInventory(item: Item) {
 
 		this.removeItem(item)
 
 	}
 
-	/**
-	 * @param <Item> item
-	 */
-	removeItem(item) {
+	removeItem(item: Item) {
 
 		const space = this.spaces.find(space => space.item === item)
 
@@ -116,25 +113,19 @@ export default class InventoryUI {
 
 	}
 
-	onInventoryButtonPressed(controller, event) {
+	onInventoryButtonPressed(controls: Controls, event: Event) {
 
 		this.open = !this.open
 		
 	}
 	
-	/**
-	 * @return <Boolean>
-	 */
-	get open() {
+	get open(): boolean {
 		
 		return this.$.classList.contains('open')
 		
 	}
 	
-	/**
-	 * @param <Boolean> open
-	 */
-	set open(open) {
+	set open(open: boolean) {
 		
 		if (open) this.$.classList.add('open')
 		

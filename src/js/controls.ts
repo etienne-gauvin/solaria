@@ -1,9 +1,12 @@
-import EventEmitter from 'events'
+import * as EventEmitter from 'events'
 
 class Action extends EventEmitter {
-
-
-	constructor(name, { keys = [], buttons = [] }) {
+	
+	public name: string
+	public keys: Array<string|number>
+	public buttons: Array<number>
+	
+	constructor(name: string, keys: Array<string|number> = [], buttons: Array<number> = []) {
 
 		super()
 
@@ -18,62 +21,77 @@ class Action extends EventEmitter {
 
 }
 
+interface GamepadInputs {
+	buttons: Array<{
+		pressed: boolean
+		value: number
+	}>
+	axes: Array<{
+		value: number
+	}>
+}
+
+interface Inputs {
+	keyboard: object
+	gamepad: GamepadInputs
+}
+
 /**
  * Gère les contrôles (clavier/souris et manette) du joueur
  */
 export default class Controls {
 	
+	private gamepad: Gamepad
+	
+	protected deadzone: number = 0.2
+	
+	// Contrôleur actuellement utilisé ('gamepad' ou 'keyboard')
+	protected controller: string = 'keyboard'
+	
+	// Valeurs sauvegardées
+	protected values: Inputs = {
+		keyboard: {},
+		gamepad: null
+	}
+	
+	// Valeurs précédentes
+	protected previous: Inputs = {
+		keyboard: {},
+		gamepad: null
+	}
+	
+	public readonly GAMEPAD = {
+		A: 0,
+		B: 1,
+		X: 2,
+		Y: 3,
+		LB: 4,
+		RB: 5,
+		LT: 6,
+		RT: 7,
+		BACK: 8,
+		START: 9,
+		UP: 12,
+		DOWN: 13,
+		LEFT: 14,
+		RIGHT: 15,
+		
+		LEFT_X: 0,
+		LEFT_Y: 1,
+		RIGHT_X: 2,
+		RIGHT_Y: 3
+	}
+	
+	public readonly actions: { [key: string]: Action } = {}
+	
+	public readonly actionsArray: Array<Action>
+	
 	constructor() {
 
-		this.gamepad = null
-		this.deadzone = 0.2
-		
-		// Contrôleur actuellement utilisé ('gamepad' ou 'keyboard')
-		this.controller = 'keyboard'
-		
-		// Valeurs sauvegardées
-		this.values = {
-			keyboard: {},
-			gamepad: null
-		}
-		
-		// Valeurs précédentes
-		this.previous = {
-			keyboard: {},
-			gamepad: null
-		}
-		
-		// Constantes
-		this.GAMEPAD = {
-			A: 0,
-			B: 1,
-			X: 2,
-			Y: 3,
-			LB: 4,
-			RB: 5,
-			LT: 6,
-			RT: 7,
-			BACK: 8,
-			START: 9,
-			UP: 12,
-			DOWN: 13,
-			LEFT: 14,
-			RIGHT: 15,
-			
-			LEFT_X: 0,
-			LEFT_Y: 1,
-			RIGHT_X: 2,
-			RIGHT_Y: 3
-		}
-
-		// Actions
-		this.actions = {}
-		this.actionsArray = []
-		
 		/**
 		 * Branchement d'une manette
 		 */
-		window.addEventListener("gamepadconnected", event => {
+		window.addEventListener('gamepadconnected', (event: GamepadEvent) => {
 			
 			const gp = event.gamepad
 			
@@ -137,7 +155,7 @@ export default class Controls {
 	/**
 	 * Mise à jour
 	 */
-	update(event) {
+	update(event): void {
 		
 		let gamepads = navigator.getGamepads()
 		this.gamepad = gamepads[0]
@@ -145,7 +163,7 @@ export default class Controls {
 		if (this.gamepad) {
 			
 			const previous = this.previous.gamepad
-			const current = this.values.gamepad = this.copyGamepadValues(this.gamepad)
+			const current = this.values.gamepad = this.copyGamepadInputs(this.gamepad)
 			
 			if (previous) {
 
@@ -185,13 +203,11 @@ export default class Controls {
 	
 	/**
 	 * Transforme un axe de joystick pour prendre en compte la zone morte.
-	 * @param <Number> axis
-	 * @return <Number>
 	 */
-	applyDeadzone(x) {
+	applyDeadzone(x: number): number {
 		
 		let deadzone = this.deadzone
-				
+		
 		x = x < 0 ? Math.min(x, -deadzone) : Math.max(x, deadzone)
 		
 		return (Math.abs(x) - deadzone) / (1 - deadzone) * Math.sign(x)
@@ -200,12 +216,10 @@ export default class Controls {
 	
 	/**
 	 * Axe X principal (joystick ou souris)
-	 * @param <Number> gamepadAxisIndex
-	 * @param <Object> keyboardKeys : { positive: <String>, negative: <String> }
 	 */
-	getAxis(gamepadAxisIndex, keyboardKeys) {
+	getAxis(gamepadAxisIndex: number, keyboardKeys: { positive: string, negative: string }): number {
 
-		let axis = 0
+		let axis: number = 0
 		
 		switch (this.controller) {
 			
@@ -213,7 +227,7 @@ export default class Controls {
 				
 				if (this.values.gamepad !== null) {
 
-					axis = this.values.gamepad.axes[gamepadAxisIndex]
+					axis = this.values.gamepad.axes[gamepadAxisIndex].value
 
 				}
 				
@@ -238,14 +252,16 @@ export default class Controls {
 	 * @param <Gamepad>
 	 * @return <Object>
 	 */
-	copyGamepadValues(gamepad) {
+	copyGamepadInputs(gamepad: Gamepad): GamepadInputs {
 		
-		let axes = []
-		let buttons = []
+		const inputs: GamepadInputs = {
+			buttons: new Array,
+			axes: new Array
+		}
 		
 		for (let i = 0; i < gamepad.buttons.length; i++) {
 			
-			buttons[i] = {
+			inputs.buttons[i] = {
 				value: gamepad.buttons[i].value,
 				pressed: gamepad.buttons[i].pressed
 			}
@@ -254,14 +270,13 @@ export default class Controls {
 		
 		for (let i = 0; i < gamepad.axes.length; i++) {
 			
-			axes[i] = this.applyDeadzone(gamepad.axes[i])
+			inputs.axes[i] = {
+				value: this.applyDeadzone(gamepad.axes[i])
+			}
 			
 		}
 		
-		return {
-			axes: axes,
-			buttons: buttons
-		}
+		return inputs
 		
 	}
 	
@@ -272,7 +287,7 @@ export default class Controls {
 	 */
 	createAction(name, { keys, buttons }) {
 
-		const action = new Action(name, { keys, buttons })
+		const action = new Action(name, keys, buttons)
 
 		this.actions[action.name] = action
 		this.actionsArray.push(action)

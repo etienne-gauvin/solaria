@@ -1,5 +1,5 @@
 import game from './game'
-import colors from './colors'
+import Color from './color'
 
 window.addEventListener('load', function () {
 	
