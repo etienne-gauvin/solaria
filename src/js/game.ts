@@ -6,20 +6,15 @@ import Ground from './ground'
 import Player from './player'
 import Camera from './camera'
 import Controls from './solaria-controls'
+import Model from './model'
 import * as ITEM from './items'
 import * as UUID from 'uuid'
 import * as THREE from 'three'
 import * as dat from 'dat-gui'
 
-interface ThreeModel {
-	path: string
-	geometry?: THREE.Geometry
-	materials?: Array<THREE.Material>
-}
-
 interface Data {
 	models: {
-		[key: string]: ThreeModel
+		[key: string]: Model
 	}
 }
 
@@ -30,8 +25,8 @@ class Game extends EventEmitter {
 	 */
 	public readonly data: Data = {
 		models: {
-			player: { path: '../models/player.json' },
-			peach: { path: '../models/peach.json' }
+			player: { src: '../models/player.json' },
+			peach: { src: '../models/peach.json' }
 		}
 	}
 	
@@ -128,12 +123,12 @@ class Game extends EventEmitter {
 				
 				if (!isLoaded(file)) {
 					
-					loader.load(file.path, (geometry, materials) => {
+					loader.load(file.src, (geometry, materials) => {
 						
 						file.geometry = geometry
 						file.materials = materials
 						
-						console.info(`Loaded: ${file.path}`)
+						console.info(`Loaded: ${file.src}`)
 						
 						let allLoaded = true
 						

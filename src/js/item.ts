@@ -7,20 +7,16 @@ abstract class Item extends THREE.SkinnedMesh {
 	
 	private static items: { [key: string]: Item } = {}
 
-	public readonly uuid: string
+	public readonly uuid: string = UUID.v4()
 
-	public readonly name: string
+	public readonly name: string = 'Item'
 
 	private _ui: ItemUI
 
-	constructor() {
+	constructor(data: { name: string, geometry: THREE.Geometry, materials: Array<THREE.Material> }) {
 		
-		super()
-		
-		this.uuid = UUID.v4()
-		this.name = this.name
-		this._ui = null
-		
+		super(data.geometry, new THREE.MultiMaterial(data.materials))
+
 		Item.items[this.uuid] = this
 
 	}

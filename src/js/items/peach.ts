@@ -4,10 +4,16 @@ import Eatable from './interfaces/eatable'
 
 export default class Peach extends Item implements Eatable {
 
-	name = 'Peach'
+	constructor() {
+		super({
+			name: 'Peach',
+			geometry: game.data.models.peach.geometry,
+			materials: game.data.models.peach.materials
+		})
+	}
 
-	geometry = game.data.models.peach.geometry
+	//geometry = game.data.models.peach.geometry
 
-	materials = game.data.models.peach.materials
+	//materials = game.data.models.peach.materials
 
 }
