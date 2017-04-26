@@ -88,9 +88,7 @@ export default class Controls {
 	
 	constructor() {
 
-		/**
-		 * Branchement d'une manette
-		 */
+		// Branchement d'une manette
 		window.addEventListener('gamepadconnected', (event: GamepadEvent) => {
 			
 			const gp = event.gamepad
@@ -107,7 +105,7 @@ export default class Controls {
 		/**
 		 * Appui sur une touche
 		 */
-		window.addEventListener('keydown', event => {
+		window.addEventListener('keydown', (event: KeyboardEvent) => {
 			
 			if (!event.defaultPrevented && !event.repeat) {
 
