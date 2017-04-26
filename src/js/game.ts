@@ -6,20 +6,15 @@ import Ground from './ground'
 import Player from './player'
 import Camera from './camera'
 import Controls from './solaria-controls'
-import WoodenChairItem from './items/wooden-chair-item'
+import Model from './model'
+import * as ITEM from './items'
 import * as UUID from 'uuid'
 import * as THREE from 'three'
 import * as dat from 'dat-gui'
 
-interface ThreeModel {
-	path: string
-	geometry: THREE.Geometry
-	materials: Array<THREE.Material>
-}
-
 interface Data {
 	models: {
-		[key: string]: ThreeModel
+		[key: string]: Model
 	}
 }
 
@@ -30,11 +25,8 @@ class Game extends EventEmitter {
 	 */
 	public readonly data: Data = {
 		models: {
-			player: {
-				path: '../models/player.json',
-				geometry: null,
-				materials: null
-			}
+			player: { src: '../models/player.json' },
+			peach: { src: '../models/peach.json' }
 		}
 	}
 	
@@ -131,12 +123,12 @@ class Game extends EventEmitter {
 				
 				if (!isLoaded(file)) {
 					
-					loader.load(file.path, (geometry, materials) => {
+					loader.load(file.src, (geometry, materials) => {
 						
 						file.geometry = geometry
 						file.materials = materials
 						
-						console.info(`Loaded: ${file.path}`)
+						console.info(`Loaded: ${file.src}`)
 						
 						let allLoaded = true
 						
@@ -295,8 +287,8 @@ class Game extends EventEmitter {
 		this.ui.inventory.attach(this.player.inventory)
 
 		// Adding an object ot the player's inventory
-		this.player.inventory.add(new WoodenChairItem)
-		this.player.inventory.add(new WoodenChairItem)
+		//this.player.inventory.add(new ITEM.WoodenChair)
+		this.player.inventory.add(new ITEM.Peach)
 		
 		// Create the camera
 		this.camera = new Camera
