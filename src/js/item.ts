@@ -1,8 +1,9 @@
 import game from './game'
 import ItemUI from './ui/item-ui'
 import * as UUID from 'uuid'
+import * as THREE from 'three'
 
-export default class Item {
+abstract class Item extends THREE.SkinnedMesh {
 	
 	private static items: { [key: string]: Item } = {}
 
@@ -12,10 +13,12 @@ export default class Item {
 
 	private _ui: ItemUI
 
-	constructor(name: string = '?') {
+	constructor() {
+		
+		super()
 		
 		this.uuid = UUID.v4()
-		this.name = name
+		this.name = this.name
 		this._ui = null
 		
 		Item.items[this.uuid] = this
@@ -36,10 +39,12 @@ export default class Item {
 
 	}
 	
-	public static get(uuid: string): Item {
+	public static getByUUID(uuid: string): Item {
 		
 		return this.items[uuid]
 		
 	}
 
 }
+
+export default Item

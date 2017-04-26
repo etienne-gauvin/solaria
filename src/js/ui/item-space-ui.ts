@@ -35,7 +35,7 @@ export default class ItemSpaceUI {
 		
 		if (uuid) {
 		
-			const droppedItem = Item.get(uuid)
+			const droppedItem = Item.getByUUID(uuid)
 			
 			if (droppedItem) {
 				

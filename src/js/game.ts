@@ -6,15 +6,15 @@ import Ground from './ground'
 import Player from './player'
 import Camera from './camera'
 import Controls from './solaria-controls'
-import WoodenChairItem from './items/wooden-chair-item'
+import * as ITEM from './items/items'
 import * as UUID from 'uuid'
 import * as THREE from 'three'
 import * as dat from 'dat-gui'
 
 interface ThreeModel {
 	path: string
-	geometry: THREE.Geometry
-	materials: Array<THREE.Material>
+	geometry?: THREE.Geometry
+	materials?: Array<THREE.Material>
 }
 
 interface Data {
@@ -30,11 +30,8 @@ class Game extends EventEmitter {
 	 */
 	public readonly data: Data = {
 		models: {
-			player: {
-				path: '../models/player.json',
-				geometry: null,
-				materials: null
-			}
+			player: { path: '../models/player.json' },
+			peach: { path: '../models/peach.json' }
 		}
 	}
 	
@@ -295,8 +292,8 @@ class Game extends EventEmitter {
 		this.ui.inventory.attach(this.player.inventory)
 
 		// Adding an object ot the player's inventory
-		this.player.inventory.add(new WoodenChairItem)
-		this.player.inventory.add(new WoodenChairItem)
+		//this.player.inventory.add(new ITEM.WoodenChair)
+		this.player.inventory.add(new ITEM.Peach)
 		
 		// Create the camera
 		this.camera = new Camera
