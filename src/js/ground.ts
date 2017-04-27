@@ -1,4 +1,5 @@
 import game from './game'
+import * as THREE from 'three'
 
 /**
  * Class Ground
@@ -17,7 +18,7 @@ class Ground extends THREE.Mesh {
 		this.geometry = new THREE.PlaneGeometry(20, 20)
 		
 		this.material = new THREE.MeshLambertMaterial({
-			color: new THREE.Color('#9DDD87'),
+			color: 0x9DDD87,
 			side: THREE.DoubleSide
 		})
 		
