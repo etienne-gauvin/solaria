@@ -2,11 +2,9 @@ import * as THREE from 'three'
 
 interface Model {
 	
-	src: string
+	geometry: THREE.Geometry
 
-	geometry?: THREE.Geometry
-
-	materials?: Array<THREE.Material>
+	materials: Array<THREE.Material>
 
 }
 

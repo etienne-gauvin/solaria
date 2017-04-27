@@ -12,9 +12,21 @@ import * as UUID from 'uuid'
 import * as THREE from 'three'
 import * as dat from 'dat-gui'
 
+interface DataSources {
+	models: {
+		[key: string]: string
+	},
+	images: {
+		[key: string]: string
+	}
+}
+
 interface Data {
 	models: {
 		[key: string]: Model
+	},
+	images: {
+		[key: string]: HTMLImageElement
 	}
 }
 
@@ -23,11 +35,22 @@ class Game extends EventEmitter {
 	/**
 	 * Files to load
 	 */
-	public readonly data: Data = {
+	public readonly dataSources: DataSources = {
 		models: {
-			player: { src: '../models/player.json' },
-			peach: { src: '../models/peach.json' }
+			player: '../models/player.json',
+			peach: '../models/peach.json'
+		},
+		images: {
+			leaf: '../images/leaf.svg'
 		}
+	}
+	
+	/**
+	 * Files loaded
+	 */
+	public readonly data: Data = {
+		models: {},
+		images: {}
 	}
 	
 	/**
@@ -108,33 +131,90 @@ class Game extends EventEmitter {
 
 		return new Promise<Function>((resolve: Function, reject: Function) => {
 
+			const sources = this.dataSources.models
 			const models = this.data.models
 
 			// Loader
 			const loader = new THREE.JSONLoader()
 			
 			// Vérifier qu'un fichier est chargé
-			const isLoaded = file => file.geometry || file.materials
+			const isLoaded = model => model.geometry || model.materials
 
 			// Charger chaque fichier
-			for (let f in models) {
+			for (let name in sources) {
 				
-				let file = models[f]
+				const src = sources[name]
+
+				const model: Model = { 
+					geometry: null,
+					materials: null
+				}
+
+				models[name] = model
 				
-				if (!isLoaded(file)) {
+				if (!isLoaded(model)) {
 					
-					loader.load(file.src, (geometry, materials) => {
+					loader.load(src, (geometry, materials) => {
 						
-						file.geometry = geometry
-						file.materials = materials
+						model.geometry = geometry
+						model.materials = materials
 						
-						console.info(`Loaded: ${file.src}`)
+						console.info(`model loaded: ${src}`)
 						
 						let allLoaded = true
 						
-						for (let ff in models) {
+						for (let name in sources) {
 
-							allLoaded = allLoaded && isLoaded(models[ff])
+							allLoaded = allLoaded && isLoaded(models[name])
+						
+						}
+						
+						if (allLoaded) resolve()
+						
+					})
+					
+				}
+				
+			}
+
+		})
+
+	}
+
+	/**
+	 * Charger les images
+	 */
+	loadImages(callback: Function = null): Promise<Function> {
+
+		return new Promise<Function>((resolve: Function, reject: Function) => {
+
+			const sources = this.dataSources.images
+			const images = this.data.images
+
+			// Loader
+			const loader = new THREE.ImageLoader()
+			
+			// Vérifier qu'un fichier est chargé
+			const isLoaded = image => image && image.complete
+
+			// Charger chaque fichier
+			for (let name in sources) {
+				
+				const src = sources[name]
+
+				if (!isLoaded(images[name])) {
+					
+					loader.load(src, (image) => {
+						
+						images[name] = image
+						
+						console.info(`image loaded: ${src}`)
+						
+						let allLoaded = true
+						
+						for (let name in sources) {
+
+							allLoaded = allLoaded && isLoaded(images[name])
 						
 						}
 						
