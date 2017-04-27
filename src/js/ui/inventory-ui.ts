@@ -1,6 +1,6 @@
 import game from '../game'
-import ItemUI from './item-ui'
-import ItemSpaceUI from './item-space-ui'
+import ItemIcon from './item-icon'
+import ItemIconSpace from './item-icon-space'
 import Inventory from '../inventory'
 import Item from '../item'
 import Controls from '../controls'
@@ -9,7 +9,7 @@ export default class InventoryUI {
 	
 	private inventory: Inventory
 	
-	private spaces: Array<ItemSpaceUI>
+	private spaces: Array<ItemIconSpace>
 	
 	private $: Element
 	
@@ -47,7 +47,7 @@ export default class InventoryUI {
 		
 		for (let i = 0; i < itemCount; i++) {
 
-			const space = new ItemSpaceUI
+			const space = new ItemIconSpace
 
 			this.spaces[i] = space
 
@@ -88,8 +88,10 @@ export default class InventoryUI {
 
 	}
 
-	addItem(item: Item, space: ItemSpaceUI) {
+	addItem(item: Item, space: ItemIconSpace) {
 		
+		item.icon.createHTMLElement()
+
 		space.appendItem(item)
 		
 	}

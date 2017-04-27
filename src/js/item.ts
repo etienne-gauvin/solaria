@@ -1,5 +1,5 @@
 import game from './game'
-import ItemUI from './ui/item-ui'
+import ItemIcon from './ui/item-icon'
 import * as UUID from 'uuid'
 import * as THREE from 'three'
 
@@ -11,7 +11,7 @@ abstract class Item extends THREE.SkinnedMesh {
 
 	public readonly name: string = 'Item'
 
-	private _ui: ItemUI
+	public readonly icon: ItemIcon = new ItemIcon(this)
 
 	constructor(data: { name: string, geometry: THREE.Geometry, materials: Array<THREE.Material> }) {
 		
@@ -21,14 +21,6 @@ abstract class Item extends THREE.SkinnedMesh {
 
 	}
 	
-	public get ui() {
-		
-		if (this._ui === null) this._ui = new ItemUI(this)
-		
-		return this._ui
-		
-	}
-
 	public toString() {
 
 		return this.name

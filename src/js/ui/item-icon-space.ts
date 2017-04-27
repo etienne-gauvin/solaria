@@ -1,7 +1,7 @@
 import game from '../game'
 import Item from '../item'
 
-export default class ItemSpaceUI {
+export default class ItemIconSpace {
 
 	public item: Item
 
@@ -41,7 +41,7 @@ export default class ItemSpaceUI {
 				
 		 		event.preventDefault()
 		 		
-		 		const remoteSpace = droppedItem.ui.space
+		 		const remoteSpace = droppedItem.icon.space
 
 		 		if (!this.isEmpty && remoteSpace) {
 		 			
@@ -64,7 +64,7 @@ export default class ItemSpaceUI {
 
 	appendItem(newItem: Item, animation: string = 'drop') {
 		
-		const remoteSpace = newItem.ui.space
+		const remoteSpace = newItem.icon.space
 
 		switch (animation) {
 
@@ -79,11 +79,11 @@ export default class ItemSpaceUI {
 						offsetHeight,
 						offsetLeft,
 						offsetTop
-					} = newItem.ui.$
+					} = newItem.icon.$
 
 					remoteSpace.removeItem()
 
-					newItem.ui
+					newItem.icon
 					
 				}
 
@@ -99,9 +99,9 @@ export default class ItemSpaceUI {
 
 		}
 		
-		this.$.appendChild(newItem.ui.$)
+		this.$.appendChild(newItem.icon.$)
 		this.item = newItem
-		newItem.ui.space = this
+		newItem.icon.space = this
 		
 	}
 
@@ -111,8 +111,8 @@ export default class ItemSpaceUI {
 			
 			const removedItem = this.item
 
-			this.$.removeChild(this.item.ui.$)
-			this.item.ui.space = null
+			this.$.removeChild(this.item.icon.$)
+			this.item.icon.space = null
 			this.item = null
 
 			return removedItem
