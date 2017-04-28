@@ -19,6 +19,8 @@ abstract class Item extends THREE.SkinnedMesh {
 
 		Item.items[this.uuid] = this
 
+		console.log(this.parent)
+
 	}
 	
 	public static getByUUID(uuid: string): Item {

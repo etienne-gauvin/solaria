@@ -6,32 +6,39 @@ export default class Inventory extends EventEmitter {
 
 	public ui: InventoryUI
 	
-	public items: Array<Item>
-
-	/**
-	 */
-	constructor() {
-		
-		super()
-		
-		this.items = new Array(15)
-		
-	}
+	public items: Array<Item> = new Array(15)
 
 	/**
 	 * Add an item in the first free space
 	 */
-	add(item: Item) {
+	add(item: Item, specificSpace: number = null) {
 
-		const freeSpace = this.items.findIndex(item => !item)
+		const forceAdd = (item, index) => {
 
-		if (freeSpace >= 0) {
+			this.items[index] = item
 
-			this.items[freeSpace] = item
+			item.parent = this
 			
-			this.emit('item-added', item, freeSpace)
+			this.emit('item-added', item, index)
 
 		}
+
+		if (specificSpace !== null && !this.items[specificSpace]) {
+
+			forceAdd(item, specificSpace)
+
+		}
+
+		else {
+
+			const freeSpace = this.items.findIndex(item => !item)
+
+			if (freeSpace >= 0) forceAdd(item, freeSpace)
+
+			else throw new Error('No free space in inventory')
+
+		}
+
 
 	}
 
