@@ -16,12 +16,12 @@
 	width: 100%;
 	background-color: #494949;
 	border-radius: 50%;
-	overflow: hidden;
 	color: beige;
 	text-align: center;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	border-radius: 50%;
 	
 	color: transparent;
 	
@@ -47,5 +47,29 @@
 
 	&.appears {
 		animation: 200ms ease-out appears;
+	}
+
+	&:after {
+		display: inline-block;
+		position: absolute;
+		background-color: black;
+		content: attr(data-name);
+		color: white;
+		padding: 0.2rem 0.3rem;
+		bottom: 90%;
+		left: 90%;
+		border-radius: 0.4rem;
+		border-bottom-left-radius: 0;
+		font-size: medium;
+		transform-origin: left bottom;
+		transform: scale(1);
+		transition: 100ms ease-out;
+		opacity: 1;
+		text-align: center;
+	}
+
+	&:not(:hover):after {
+		transform: scale(0);
+		opacity: 0;
 	}
 }

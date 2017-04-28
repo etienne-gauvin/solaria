@@ -27,6 +27,7 @@ export default class ItemIcon {
 			$.innerHTML = this.item.toString()
 			
 			$.setAttribute('data-uuid', this.item.uuid)
+			$.setAttribute('data-name', this.item.name)
 			$.setAttribute('draggable', 'true')
 			
 			//$.style.backgroundColor = `hsl(${game.chance.integer({min: 0, max: 360})}, 100%, 50%)`
