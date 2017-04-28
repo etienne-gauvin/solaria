@@ -11,6 +11,8 @@ import * as ITEM from './items'
 import * as UUID from 'uuid'
 import * as THREE from 'three'
 import * as dat from 'dat-gui'
+import { Scene } from './scene'
+import DefaultScene from './scenes/default-scene'
 
 interface DataSources {
 	models: {
@@ -56,7 +58,7 @@ class Game extends EventEmitter {
 	/**
 	 * Current loop event
 	 */
-	public readonly event = {
+	public readonly event: { delta: number, time: number } = {
 		delta: 0,
 		time: 0
 	}
@@ -104,7 +106,7 @@ class Game extends EventEmitter {
 	public height: number
 	
 	// Current Scene
-	public scene: THREE.Scene
+	public scene: Scene
 	
 	// Chance
 	public readonly chance = new Chance
@@ -260,8 +262,8 @@ class Game extends EventEmitter {
 		this.width = window.innerWidth
 
 		// Create the scene
-		this.scene = new THREE.Scene()
-		this.datgui.add(this.scene, 'visible').name('Scene Visible')
+		this.scene = new DefaultScene
+		this.datgui.add(this.scene, 'visible').name('Scene Visible').listen()
 		
 		// Add a fog effect to the scene same color as the
 		// background color used in the style sheet
@@ -420,7 +422,7 @@ class Game extends EventEmitter {
 		
 		// Mise à jour des contrôles
 		this.controls.update(event)
-		
+
 		// Mise à jour des objets
 		this.scene.traverseVisible((child: any) => {
 			
@@ -431,6 +433,9 @@ class Game extends EventEmitter {
 			child.update && child.update(event)
 			
 		})
+
+		// Updating scene
+		this.scene.update(event)
 
 		// Diffusion de l'event "update"
 		this.emit('update', event)
