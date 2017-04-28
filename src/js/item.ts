@@ -13,17 +13,11 @@ abstract class Item extends THREE.SkinnedMesh {
 
 	public readonly icon: ItemIcon = new ItemIcon(this)
 
-	constructor(data: { name: string, geometry: THREE.Geometry, materials: Array<THREE.Material> }) {
+	constructor(geometry: THREE.Geometry, materials: Array<THREE.Material>) {
 		
-		super(data.geometry, new THREE.MultiMaterial(data.materials))
+		super(geometry, new THREE.MultiMaterial(materials))
 
 		Item.items[this.uuid] = this
-
-	}
-	
-	public toString() {
-
-		return this.name
 
 	}
 	
