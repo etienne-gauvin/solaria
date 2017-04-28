@@ -43,7 +43,7 @@ export default class ItemIconSpace {
 		 		
 		 		const remoteSpace = droppedItem.icon.space
 
-		 		if (!this.isEmpty && remoteSpace) {
+		 		if (!this.isEmpty && remoteSpace && remoteSpace !== this) {
 		 			
 		 			remoteSpace.removeItem()
 		 			remoteSpace.appendItem(this.item, 'translate')
